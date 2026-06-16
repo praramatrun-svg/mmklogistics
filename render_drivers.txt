@@ -1,0 +1,84 @@
+1819:         function renderDriversTable() {
+1820:             let drivers = DB.get("drivers");
+1821:             if (hqSessionWarehouse !== 'all') {
+1822:                 drivers = drivers.filter(d => d.warehouse === hqSessionWarehouse);
+1823:             }
+1824:             const tbody = document.getElementById('driverTableBody');
+1825:             tbody.innerHTML = '';
+1826: 
+1827:             if (drivers.length === 0) {
+1828:                 tbody.innerHTML = `<tr><td colspan="11" style="text-align:center; color:var(--hq-text-muted); padding:2rem;">ไม่มีรายชื่อพนักงานจัดส่งในระบบ</td></tr>`;
+1829:                 return;
+1830:             }
+1831: 
+1832:             drivers.forEach(drv => {
+1833:                 let statusBadge = '';
+1834:                 let actionBtn = '';
+1835: 
+1836:                 if (drv.status === 'pending') {
+1837:                     statusBadge = `<span class="badge badge-pending">รออนุมัติ</span>`;
+1838:                     actionBtn = `
+1839:                         <button class="btn btn-primary btn-sm" onclick="updateDriverStatus('${drv.id}', 'approved')" style="background:var(--color-success);">อนุมัติ</button>
+1840:                         <button class="btn btn-outline btn-sm" onclick="updateDriverStatus('${drv.id}', 'rejected')" style="color:var(--color-danger); border-color:rgba(239,68,68,0.2);">ปฏิเสธ</button>
+1841:                     `;
+1842:                 } else if (drv.status === 'approved') {
+1843:                     statusBadge = `<span class="badge badge-approved">อนุมัติแล้ว</span>`;
+1844:                     actionBtn = `<button class="btn btn-outline btn-sm" onclick="updateDriverStatus('${drv.id}', 'pending')">ระงับชั่วคราว</button>`;
+1845:                 } else {
+1846:                     statusBadge = `<span class="badge badge-rejected">ปฏิเสธสิทธิ์</span>`;
+1847:                     actionBtn = `<button class="btn btn-primary btn-sm" onclick="updateDriverStatus('${drv.id}', 'approved')" style="background:var(--color-success);">อนุมัติอีกครั้ง</button>`;
+1848:                 }
+1849: 
+1850:                 const vehicleMapping = {
+1851:                     pickup: "กระบะ 4 ล้อ (Pickup)",
+1852:                     truck: "บรรทุก 6 ล้อใหญ่ (Truck)"
+1853:                 };
+1854: 
+1855:                 const typeLabel = drv.driverType === 'regular' ?
+1856:                     `<span style="background:rgba(37, 99, 235, 0.1); color:var(--color-primary); padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:bold;">คนขับประจำ</span>` :
+1857:                     `<span style="background:rgba(139, 92, 246, 0.1); color:var(--color-secondary); padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:bold;">ขนส่งนอก</span>`;
+1858: 
+1859:                 let weightCapacityHtml = '';
+1860:                 if (drv.driverType === '3pl') {
+1861:                     const fixedW = drv.maxWeight || getDriverDefaultMaxWeight('3pl', drv.vehicleType);
+1862:                     weightCapacityHtml = `<span style="color:var(--hq-text-muted); font-weight:600;">${fixedW.toLocaleString()} กก. (คงที่)</span>`;
+1863:                 } else {
+1864:                     const currentW = drv.maxWeight || getDriverDefaultMaxWeight('regular', drv.vehicleType);
+1865:                     weightCapacityHtml = `
+1866:                         <input type="number" class="table-input" value="${currentW}"
+1867:                                style="width: 100px; padding: 4px 8px; border-radius: 8px; border: 1px solid var(--hq-border); background: rgba(255,255,255,0.03); color: white; text-align: center; font-weight: bold;"
+1868:                                onchange="updateDriverMaxWeight('${drv.id}', this.value)">
+1869:                     `;
+1870:                 }
+1871: 
+1872:                 tbody.innerHTML += `
+1873:                     <tr>
+1874:                         <td style="font-family:var(--font-heading); font-weight:600;">${drv.id}</td>
+1875:                         <td>${typeLabel}</td>
+1876:                         <td><strong>${drv.name}</strong></td>
+1877:                         <td>${drv.phone}</td>
+1878:                         <td>${drv.plate}</td>
+1879:                         <td><strong>${drv.plateProvince || 'ไม่ระบุ'}</strong></td>
+1880:                         <td><span style="color: var(--color-secondary); font-weight: 600;">${drv.warehouse || 'สุขสวัสดิ์'}</span></td>
+1881:                         <td>${vehicleMapping[drv.vehicleType] || drv.vehicleType}</td>
+1882:                         <td>${weightCapacityHtml}</td>
+1883:                         <td>${statusBadge}</td>
+1884:                         <td><div style="display:flex; gap:0.5rem;">${actionBtn}</div></td>
+1885:                     </tr>
+1886:                 `;
+1887:             });
+1888:         }
+1889: 
+1890:         function updateDriverMaxWeight(driverId, value) {
+1891:             const drivers = DB.get("drivers");
+1892:             const drv = drivers.find(d => d.id === driverId);
+1893:             if (drv) {
+1894:                 const parsed = parseFloat(value);
+1895:                 if (!isNaN(parsed) && parsed >= 0) {
+1896:                     drv.maxWeight = parsed;
+1897:                     DB.set("drivers", drivers);
+1898:                     // Refresh routing displays if any selected
+1899:                     if (typeof selectedAssignWarehouseName !== 'undefined' && selectedAssignWarehouseName) {
+1900:                         const activeWhBtn = document.querySelector(`.warehouse-sel-btn[data-wh="${selectedAssignWarehouseName}"]`);
+1901:                         selectAssignWarehouse(selectedAssignWarehouseName, activeWhBtn);
+1902:                     }

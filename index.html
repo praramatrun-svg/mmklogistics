@@ -1,0 +1,451 @@
+﻿<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>AI Logistics Hub</title>
+    <meta name="description" content="ระบบจัดการขนส่งอัจฉริยะ AI Logistics">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* ─── PORTAL MOBILE-FIRST OVERRIDES ─── */
+        .portal-container {
+            padding: 0;
+            align-items: flex-start;
+            flex-direction: column;
+            min-height: 100vh;
+            background: radial-gradient(ellipse at top, rgba(59,130,246,0.12) 0%, transparent 60%),
+                        radial-gradient(ellipse at bottom right, rgba(139,92,246,0.1) 0%, transparent 60%),
+                        #070a13;
+        }
+
+        /* ─── HEADER ─── */
+        .hub-header {
+            text-align: center;
+            padding: 3rem 1.5rem 2rem;
+            width: 100%;
+        }
+        .hub-logo-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 30px;
+            padding: 5px 14px;
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: rgba(255,255,255,0.4);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        .hub-title {
+            font-family: var(--font-heading);
+            font-size: clamp(2rem, 8vw, 3.2rem);
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: -1px;
+            line-height: 1.1;
+            margin-bottom: 0.5rem;
+        }
+        .hub-title .gradient-text {
+            background: linear-gradient(90deg, #60a5fa 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hub-subtitle {
+            font-size: 0.88rem;
+            color: rgba(255,255,255,0.35);
+            margin-top: 0.3rem;
+        }
+
+        /* ─── CARD GRID ─── */
+        .portal-card-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 0 1rem 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .portal-card-wrapper {
+                flex-direction: row;
+                max-width: 980px;
+                gap: 1.5rem;
+                padding: 0 2rem 3rem;
+                align-items: stretch;
+            }
+            .hub-header {
+                padding: 3rem 2rem 1.5rem;
+            }
+        }
+
+        /* ─── INDIVIDUAL CARD ─── */
+        .portal-card {
+            flex: 1;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.1rem 1.2rem;
+            border-radius: 18px;
+            text-align: left;
+            cursor: pointer;
+            justify-content: flex-start;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+
+        .portal-card:active {
+            transform: scale(0.97);
+            background: rgba(255,255,255,0.07);
+        }
+
+        @media (min-width: 768px) {
+            .portal-card {
+                flex-direction: column;
+                text-align: center;
+                padding: 2.5rem 1.8rem;
+                justify-content: space-between;
+                min-height: 380px;
+                align-items: center;
+                background: var(--hq-bg-card);
+                backdrop-filter: blur(16px);
+            }
+            .portal-card:hover {
+                transform: translateY(-6px);
+                box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+            }
+        }
+
+        .portal-icon {
+            width: 52px;
+            height: 52px;
+            min-width: 52px;
+            font-size: 1.6rem;
+            margin-bottom: 0;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media (min-width: 768px) {
+            .portal-icon {
+                width: 76px;
+                height: 76px;
+                font-size: 2rem;
+                margin-bottom: 1.5rem;
+                border-radius: 18px;
+            }
+        }
+
+        .portal-card-body {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .portal-title {
+            font-size: 0.98rem;
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        @media (min-width: 768px) {
+            .portal-title {
+                font-size: 1.45rem;
+                margin-bottom: 0.75rem;
+                white-space: normal;
+            }
+        }
+
+        .portal-tag {
+            font-size: 0.72rem;
+            color: rgba(255,255,255,0.38);
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        @media (min-width: 768px) {
+            .portal-tag {
+                font-size: 0.88rem;
+                color: rgba(255,255,255,0.45);
+                -webkit-line-clamp: unset;
+                overflow: visible;
+                line-height: 1.6;
+                margin-bottom: 1.5rem;
+                flex: 1;
+            }
+        }
+
+        /* Mobile: chevron arrow */
+        .portal-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            min-width: 36px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: white;
+            pointer-events: none;
+        }
+
+        /* Desktop: full-width button shown, arrow hidden */
+        .portal-action-btn {
+            display: none;
+            width: 100%;
+            padding: 0.9rem;
+            font-size: 0.92rem;
+            font-weight: 700;
+            border-radius: 14px;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            color: white;
+            font-family: var(--font-heading);
+            transition: opacity 0.2s;
+        }
+        .portal-action-btn:hover { opacity: 0.9; }
+
+        @media (min-width: 768px) {
+            .portal-action-btn { display: block; }
+            .portal-arrow { display: none; }
+        }
+
+        /* ─── SECTION LABELS (mobile only) ─── */
+        .portal-section-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.2);
+            padding: 0.8rem 0.3rem 0.3rem;
+        }
+        @media (min-width: 768px) {
+            .portal-section-label { display: none; }
+        }
+
+        /* ─── VERSION FOOTER ─── */
+        .hub-footer {
+            text-align: center;
+            font-size: 0.68rem;
+            color: rgba(255,255,255,0.15);
+            padding: 0 1rem 2rem;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="portal-container">
+
+        <!-- Header -->
+        <div class="hub-header">
+            <div class="hub-logo-badge">🚛 AI LOGISTICS</div>
+            <h1 class="hub-title">Logistics <span class="gradient-text">Hub</span></h1>
+            <p class="hub-subtitle">เลือกประเภทการใช้งาน</p>
+        </div>
+
+        <!-- Cards -->
+        <div class="portal-card-wrapper">
+
+            <div class="portal-section-label">ผู้ดูแลระบบ</div>
+
+            <!-- Super Admin -->
+            <div id="cardSuperAdmin" class="portal-card" onclick="location.href='super.html'" style="border-color: rgba(236,72,153,0.2);">
+                <div class="portal-icon" style="background: linear-gradient(135deg, rgba(236,72,153,0.25), rgba(239,68,68,0.18));">🔑</div>
+                <div class="portal-card-body">
+                    <div class="portal-title">Super Admin</div>
+                    <div class="portal-tag">จัดการบัญชี สิทธิ์ทั้งระบบ</div>
+                </div>
+                <div class="portal-arrow" style="background: rgba(236,72,153,0.15);">›</div>
+                <button class="portal-action-btn" style="background: var(--color-danger);">เข้าระบบควบคุมหลัก →</button>
+            </div>
+
+            <div class="portal-section-label">เจ้าหน้าที่คลัง</div>
+
+            <!-- Admin HQ -->
+            <div id="cardAdminHQ" class="portal-card" onclick="openAdminAuth()" style="border-color: rgba(59,130,246,0.2);">
+                <div class="portal-icon" style="background: linear-gradient(135deg, rgba(59,130,246,0.25), rgba(139,92,246,0.18));">🏬</div>
+                <div class="portal-card-body">
+                    <div class="portal-title">Admin HQ Portal</div>
+                    <div class="portal-tag">จัดเส้นทาง ตรวจแผนที่ อนุมัติ POD</div>
+                </div>
+                <div class="portal-arrow" style="background: rgba(59,130,246,0.15);">›</div>
+                <button class="portal-action-btn" style="background: var(--color-primary);">เข้าสู่ระบบหลังบ้าน →</button>
+            </div>
+
+            <div class="portal-section-label">พนักงานขับรถ</div>
+
+            <!-- Driver -->
+            <div id="cardDriver" class="portal-card" onclick="location.href='driver.html'" style="border-color: rgba(16,185,129,0.2);">
+                <div class="portal-icon" style="background: linear-gradient(135deg, rgba(16,185,129,0.25), rgba(6,182,212,0.18));">🚚</div>
+                <div class="portal-card-body">
+                    <div class="portal-title">Driver App</div>
+                    <div class="portal-tag">รับงาน นำทาง GPS ส่ง POD</div>
+                </div>
+                <div class="portal-arrow" style="background: rgba(16,185,129,0.15);">›</div>
+                <button class="portal-action-btn" style="background: var(--color-success);">เปิดระบบคนขับ →</button>
+            </div>
+
+        </div>
+
+        <div class="hub-footer">AI Logistics Platform · v2.5</div>
+    </div>
+
+    <!-- Admin Login Modal -->
+    <div class="auth-overlay" id="authOverlay" onclick="closeAdminAuth(event)">
+        <div class="auth-modal" style="max-width: 400px; width: 90vw;" onclick="event.stopPropagation()">
+            <div style="font-size: 2.2rem; margin-bottom: 0.8rem;">🔐</div>
+            <h3 style="font-size: 1.3rem; color: white; margin-bottom: 0.3rem; font-family: var(--font-heading);">Admin HQ Login</h3>
+            <p style="color: rgba(255,255,255,0.4); font-size: 0.8rem; margin-bottom: 1.5rem;">กรอกข้อมูลเข้าสู่ระบบคลัง</p>
+
+            <div style="display:flex; flex-direction:column; gap:0.9rem; text-align:left; margin-bottom:1.2rem;">
+                <div>
+                    <label style="font-size:0.72rem; color:rgba(255,255,255,0.4); font-weight:700; letter-spacing:1px; text-transform:uppercase; display:block; margin-bottom:6px;">USERNAME</label>
+                    <input type="text" id="loginUsername" class="form-input" style="background:rgba(255,255,255,0.05); color:white; border-color:rgba(255,255,255,0.12); width:100%; box-sizing:border-box;" placeholder="ระบุ username">
+                </div>
+                <div>
+                    <label style="font-size:0.72rem; color:rgba(255,255,255,0.4); font-weight:700; letter-spacing:1px; text-transform:uppercase; display:block; margin-bottom:6px;">PASSWORD</label>
+                    <input type="password" id="loginPassword" class="form-input" style="background:rgba(255,255,255,0.05); color:white; border-color:rgba(255,255,255,0.12); width:100%; box-sizing:border-box;" placeholder="ระบุ password" onkeydown="if(event.key==='Enter') verifyHqLogin()">
+                </div>
+                <span id="authError" style="color:#f87171; font-size:0.8rem; min-height:1.2em; display:block;"></span>
+            </div>
+
+            <div style="display:flex; gap:0.7rem;">
+                <button class="btn btn-outline" style="flex:1; padding:0.8rem; font-size:0.9rem;" onclick="hideOverlay()">ยกเลิก</button>
+                <button class="btn btn-primary" style="flex:2; padding:0.8rem; font-size:0.9rem;" onclick="verifyHqLogin()">เข้าสู่ระบบ →</button>
+            </div>
+
+            <div style="margin-top:1.2rem; text-align:center; border-top:1px solid rgba(255,255,255,0.07); padding-top:1rem;">
+                <span style="font-size:0.78rem; color:rgba(255,255,255,0.35);">ยังไม่มีบัญชี?</span>
+                <a href="#" onclick="openAdminRegister(event)" style="font-size:0.78rem; color:var(--color-secondary); font-weight:bold; text-decoration:none; margin-left:5px;">สมัครที่นี่ →</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Register Modal -->
+    <div class="auth-overlay" id="registerOverlay" onclick="closeAdminRegister(event)">
+        <div class="auth-modal" style="max-width: 400px; width: 90vw;" onclick="event.stopPropagation()">
+            <div style="font-size: 2.2rem; margin-bottom: 0.8rem;">📝</div>
+            <h3 style="font-size: 1.3rem; color: white; margin-bottom: 0.3rem; font-family: var(--font-heading);">สมัคร Admin HQ</h3>
+            <p style="color: rgba(255,255,255,0.4); font-size: 0.8rem; margin-bottom: 1.5rem;">ส่งคำขอเปิดสิทธิ์บัญชีประจำคลัง</p>
+
+            <form id="adminRegisterForm" onsubmit="handleAdminRegister(event)">
+                <div style="display:flex; flex-direction:column; gap:0.8rem; text-align:left; margin-bottom:1.2rem;">
+                    <div>
+                        <label style="font-size:0.72rem; color:rgba(255,255,255,0.4); font-weight:700; letter-spacing:1px; text-transform:uppercase; display:block; margin-bottom:6px;">USERNAME</label>
+                        <input type="text" id="regUsername" class="form-input" style="background:rgba(255,255,255,0.05); color:white; border-color:rgba(255,255,255,0.12); width:100%; box-sizing:border-box;" placeholder="เช่น pty_admin" required>
+                    </div>
+                    <div>
+                        <label style="font-size:0.72rem; color:rgba(255,255,255,0.4); font-weight:700; letter-spacing:1px; text-transform:uppercase; display:block; margin-bottom:6px;">PASSWORD</label>
+                        <input type="password" id="regPassword" class="form-input" style="background:rgba(255,255,255,0.05); color:white; border-color:rgba(255,255,255,0.12); width:100%; box-sizing:border-box;" placeholder="ขั้นต่ำ 4 ตัวอักษร" required>
+                    </div>
+                    <div>
+                        <label style="font-size:0.72rem; color:rgba(255,255,255,0.4); font-weight:700; letter-spacing:1px; text-transform:uppercase; display:block; margin-bottom:6px;">ชื่อ-นามสกุล</label>
+                        <input type="text" id="regName" class="form-input" style="background:rgba(255,255,255,0.05); color:white; border-color:rgba(255,255,255,0.12); width:100%; box-sizing:border-box;" placeholder="ชื่อเจ้าหน้าที่" required>
+                    </div>
+                    <div>
+                        <label style="font-size:0.72rem; color:rgba(255,255,255,0.4); font-weight:700; letter-spacing:1px; text-transform:uppercase; display:block; margin-bottom:6px;">คลังสังกัด</label>
+                        <select id="regWarehouse" class="form-select" style="background:#1e293b; color:#f1f5f9; border-color:rgba(255,255,255,0.12); width:100%; box-sizing:border-box;" required>
+                            <option value="all">Admin Logistics (ทุกคลัง)</option>
+                            <option value="สุขสวัสดิ์">คลังสุขสวัสดิ์</option>
+                            <option value="พัทยา">คลังพัทยา</option>
+                            <option value="โคราช">คลังโคราช</option>
+                            <option value="ปราจีนบุรี">คลังปราจีนบุรี</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="display:flex; gap:0.7rem;">
+                    <button type="button" class="btn btn-outline" style="flex:1; padding:0.8rem; font-size:0.9rem;" onclick="hideRegisterOverlay()">ยกเลิก</button>
+                    <button type="submit" class="btn btn-primary" style="flex:2; padding:0.8rem; font-size:0.9rem; background:var(--color-secondary);">ส่งคำขอสมัคร →</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        function openAdminAuth() {
+            document.getElementById('authOverlay').classList.add('active');
+            setTimeout(() => document.getElementById('loginUsername').focus(), 150);
+        }
+        function hideOverlay() {
+            document.getElementById('authOverlay').classList.remove('active');
+            document.getElementById('loginUsername').value = '';
+            document.getElementById('loginPassword').value = '';
+            document.getElementById('authError').textContent = '';
+        }
+        function closeAdminAuth(e) {
+            if (e.target === document.getElementById('authOverlay')) hideOverlay();
+        }
+        function openAdminRegister(e) {
+            if (e) e.preventDefault();
+            hideOverlay();
+            document.getElementById('registerOverlay').classList.add('active');
+        }
+        function hideRegisterOverlay() {
+            document.getElementById('registerOverlay').classList.remove('active');
+            document.getElementById('adminRegisterForm').reset();
+        }
+        function closeAdminRegister(e) {
+            if (e.target === document.getElementById('registerOverlay')) hideRegisterOverlay();
+        }
+        function verifyHqLogin() {
+            const userVal = document.getElementById('loginUsername').value.trim();
+            const passVal = document.getElementById('loginPassword').value;
+            const errorField = document.getElementById('authError');
+            if (!userVal || !passVal) { errorField.textContent = 'กรุณากรอก username และ password'; return; }
+            const accounts = DB.get("hq_accounts", []);
+            const targetAcc = accounts.find(a => a.username === userVal && a.password === passVal);
+            if (!targetAcc) { errorField.textContent = '❌ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง'; shakeField('loginPassword'); return; }
+            if (targetAcc.status === 'pending') { errorField.textContent = '⏳ รอการอนุมัติจากผู้ควบคุมระบบ'; return; }
+            if (targetAcc.status !== 'approved') { errorField.textContent = '⛔ บัญชีถูกระงับ ติดต่อ mmk-mt'; return; }
+            localStorage.setItem('hq_session_id', targetAcc.id);
+            localStorage.setItem('hq_session_name', targetAcc.name);
+            localStorage.setItem('hq_session_warehouse', targetAcc.warehouse);
+            errorField.textContent = '';
+            location.href = 'admin.html';
+        }
+        function handleAdminRegister(event) {
+            event.preventDefault();
+            const userVal = document.getElementById('regUsername').value.trim();
+            const passVal = document.getElementById('regPassword').value;
+            const nameVal = document.getElementById('regName').value;
+            const warehouseVal = document.getElementById('regWarehouse').value;
+            if (passVal.length < 4) { alert('รหัสผ่านต้องมีอย่างน้อย 4 ตัวอักษร'); return; }
+            const accounts = DB.get("hq_accounts", []);
+            if (accounts.some(a => a.username.toLowerCase() === userVal.toLowerCase())) { alert('ชื่อผู้ใช้งานนี้ถูกใช้ไปแล้ว'); return; }
+            accounts.push({ id: `hq-${Date.now()}`, username: userVal, password: passVal, name: nameVal, warehouse: warehouseVal, status: 'pending', createdAt: new Date().toISOString() });
+            DB.set("hq_accounts", accounts);
+            alert('ส่งคำขอสำเร็จ! รอการอนุมัติจาก mmk-mt');
+            hideRegisterOverlay();
+            openAdminAuth();
+        }
+        function shakeField(fieldId) {
+            const f = document.getElementById(fieldId);
+            f.style.borderColor = 'var(--color-danger)';
+            f.classList.add('shake');
+            setTimeout(() => { f.classList.remove('shake'); f.style.borderColor = 'rgba(255,255,255,0.12)'; }, 400);
+        }
+    </script>
+</body>
+</html>

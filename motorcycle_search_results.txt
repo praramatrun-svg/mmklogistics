@@ -1,0 +1,18 @@
+====== FILE: app.js ======
+94: { id: "drv-3", name: "มานะ ขนส่งนอก (Mana)", phone: "085-333-4444", plate: "มข-789", plateProvince: "นครราชสีมา", vehicleType: "motorcycle", warehouse: "โคราช", status: "pending", driverType: "3pl" }
+
+====== FILE: admin.html ======
+1867: motorcycle: "จักรยานยนต์ (Motorcycle)"
+1956: const vehicleMappingShort = { pickup: "กระบะ", truck: "6ล้อ", truck_12: "12ล้อ", motorcycle: "มอเตอร์ไซค์" };
+1969: const vehicleMappingShort = { pickup: "กระบะ", truck: "6ล้อ", truck_12: "12ล้อ", motorcycle: "มอเตอร์ไซค์" };
+2215: const vehicleMappingShort = { pickup: "กระบะ", truck: "6ล้อ", truck_12: "12ล้อ", motorcycle: "มอเตอร์ไซค์" };
+2619: const vehicleMappingShort = { pickup: "กระบะ", truck: "6ล้อ", truck_12: "12ล้อ", motorcycle: "มอเตอร์ไซค์" };
+3439: const vehicleMappingShort = { pickup: "กระบะ", truck: "6ล้อ", truck_12: "12ล้อ", motorcycle: "มอเตอร์ไซค์" };
+
+====== FILE: driver.html ======
+460: <option value="motorcycle">รถจักรยานยนต์ (Motorcycle)</option>
+512: <option value="motorcycle">รถจักรยานยนต์ (Motorcycle)</option>
+
+====== FILE: super.html ======
+307: <option value="motorcycle">รถมอเตอร์ไซค์ (Motorcycle)</option>
+758: motorcycle: "จักรยานยนต์ (Motorcycle)"

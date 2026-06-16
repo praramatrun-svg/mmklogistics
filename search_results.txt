@@ -1,0 +1,502 @@
+=== Matches for 'tab-drivers' ===
+622: <div id="tab-drivers" class="tab-content">
+
+=== Matches for 'driverTable' ===
+643: <tbody id="driverTableBody">
+1838: const tbody = document.getElementById('driverTableBody');
+
+=== Matches for 'driverList' ===
+1922: const driverListEl = document.getElementById('driverSelectorCards');
+1923: if (driverListEl) {
+1924: driverListEl.innerHTML = `<p style="color: var(--hq-text-muted); font-size: 0.85rem; text-align: center; padding: 1rem 0;">เลือกคลังด้านบนเพื่อดูรายชื่อคนขับ</p>`;
+2196: const driverListEl = document.getElementById('driverSelectorCards');
+2197: if (!driverListEl) return;
+2198: driverListEl.innerHTML = '';
+2203: driverListEl.innerHTML = `<p style="color: var(--color-danger); font-size: 0.85rem; text-align: center; padding: 1rem 0;">⚠️ คลัง ${whName} ยังไม่มีคนขับได้รับการอนุมัติ</p>`;
+2218: driverListEl.innerHTML += `
+
+=== Matches for 'renderDrivers' ===
+1236: renderDriversTable();
+1273: renderDriversTable();
+1424: <td>${renderDriverSelect(ord.id, ord.assignedDriverId, ord.warehouse)}</td>
+1833: function renderDriversTable() {
+1906: renderDriversTable();
+3433: function renderDriverSelect(orderId, currentDriverId, warehouse) {
+3494: renderDriversTable();
+3503: renderDriversTable();
+
+=== Matches for 'upload' ===
+455: <!-- LEFT: Excel Upload + Imported Preview -->
+458: <!-- STEP 1: Upload -->
+466: <div id="excelDropZone" class="excel-upload-zone" style="margin-bottom: 1rem; cursor: pointer; padding: 1.5rem;"
+474: <input type="file" id="excelFileInput" style="display: none;" accept=".xlsx, .xls, .csv" onchange="handleExcelFileUpload(this)">
+487: <!-- STEP 2: Imported Orders Preview (shown after upload) -->
+856: <!-- UPPER WINDOW: Excel Upload Panel (หน้าต่างอัปโหลด Excel) -->
+897: <!-- Excel Upload button -->
+901: <input type="file" id="stockExcelFileInput" style="display: none;" accept=".xlsx, .xls, .csv" onchange="handleStockExcelUpload(this)">
+905: <!-- Drag-and-drop Excel upload zone for Stock, matching routing tab -->
+906: <div id="stockExcelDropZone" class="excel-upload-zone" style="cursor: pointer; padding: 1.5rem; border: 2px dashed rgba(59, 130, 246, 0.3); background: rgba(59, 130, 246, 0.02); border-radius: 16px; text-align: center; transition: all 0.3s;"
+1205: let tempUploadedOrders = [];
+1913: // RENDER: ROUTING & EXCEL UPLOADER
+1940: // Render temp uploaded orders preview
+1941: renderTempUploadedOrders();
+2023: // Handle CSV / Excel uploads
+2024: function handleExcelFileUpload(input) {
+2114: tempUploadedOrders = parsedOrders;
+2121: renderTempUploadedOrders();
+2136: handleExcelFileUpload(input);
+2140: function renderTempUploadedOrders() {
+2147: if (tempUploadedOrders.length === 0) {
+2154: if (countBadge) countBadge.textContent = `${tempUploadedOrders.length} ออเดอร์`;
+2156: tempUploadedOrders.forEach((ord, index) => {
+2245: // Enable confirm button if we have temp uploaded orders
+2248: if (tempUploadedOrders.length > 0) {
+2326: tempUploadedOrders = [];
+2327: renderTempUploadedOrders();
+2339: if (tempUploadedOrders.length === 0) {
+2351: const totalNewOrders = tempUploadedOrders.length;
+2353: tempUploadedOrders.forEach(o => {
+2392: tempUploadedOrders.forEach((o, index) => {
+2415: if (tempUploadedOrders.length === 0 || !selectedAssignDriverId) return;
+2422: tempUploadedOrders.forEach((newOrd, index) => {
+2461: tempUploadedOrders = [];
+3575: handleStockExcelUpload(input);
+3685: function handleStockExcelUpload(input) {
+
+=== Matches for 'excel' ===
+8: <!-- SheetJS for client-side Excel Parsing -->
+455: <!-- LEFT: Excel Upload + Imported Preview -->
+462: <h3 style="font-size: 1rem; font-weight: 700; color: white; margin: 0;">อัปโหลดบิล Excel / CSV</h3>
+466: <div id="excelDropZone" class="excel-upload-zone" style="margin-bottom: 1rem; cursor: pointer; padding: 1.5rem;"
+467: onclick="document.getElementById('excelFileInput').click()"
+470: ondrop="handleExcelDrop(event)">
+474: <input type="file" id="excelFileInput" style="display: none;" accept=".xlsx, .xls, .csv" onchange="handleExcelFileUpload(this)">
+856: <!-- UPPER WINDOW: Excel Upload Panel (หน้าต่างอัปโหลด Excel) -->
+859: <h3 class="hq-panel-title">📥 หน้าต่างนำเข้าไฟล์สต็อกสินค้า (Excel & Google Sheets Sync)</h3>
+897: <!-- Excel Upload button -->
+898: <button onclick="document.getElementById('stockExcelFileInput').click()" class="btn btn-primary" style="padding: 0.45rem 1rem; font-size: 0.8rem; font-weight: 700; background: linear-gradient(135deg, #0284c7, #0369a1); border: none; display: flex; align-items: center; gap: 6px;">
+899: 📥 อัปโหลด Excel
+901: <input type="file" id="stockExcelFileInput" style="display: none;" accept=".xlsx, .xls, .csv" onchange="handleStockExcelUpload(this)">
+905: <!-- Drag-and-drop Excel upload zone for Stock, matching routing tab -->
+906: <div id="stockExcelDropZone" class="excel-upload-zone" style="cursor: pointer; padding: 1.5rem; border: 2px dashed rgba(59, 130, 246, 0.3); background: rgba(59, 130, 246, 0.02); border-radius: 16px; text-align: center; transition: all 0.3s;"
+907: onclick="document.getElementById('stockExcelFileInput').click()"
+910: ondrop="handleStockExcelDrop(event)">
+912: <strong style="color: white; font-size: 0.9rem; display: block; margin-top: 0.3rem;">ลากไฟล์ Excel / CSV สต็อกสินค้ามาวางที่นี่ หรือคลิกเพื่ออัปโหลด</strong>
+920: <h3 class="hq-panel-title">📋 รายการข้อมูลสินค้าตาม Excel (Inventory Database)</h3>
+1913: // RENDER: ROUTING & EXCEL UPLOADER
+2023: // Handle CSV / Excel uploads
+2024: function handleExcelFileUpload(input) {
+2047: const parsedOrders = mapExcelJsonToOrders(json);
+2050: alert("เกิดข้อผิดพลาดในการโหลดไฟล์ Excel: " + err.message);
+2059: function mapExcelJsonToOrders(json) {
+2078: const parsedItems = parseExcelItemLine(itemLine);
+2129: function handleExcelDrop(e) {
+2134: const input = document.getElementById('excelFileInput');
+2136: handleExcelFileUpload(input);
+2847: // UTF-8 BOM mapping for Excel Thai compatibility
+3568: function handleStockExcelDrop(e) {
+3573: const input = document.getElementById('stockExcelFileInput');
+3575: handleStockExcelUpload(input);
+3685: function handleStockExcelUpload(input) {
+3706: updateStockFromExcel(json);
+3708: alert("เกิดข้อผิดพลาดในการโหลดไฟล์ Excel สำหรับสต็อก: " + err.message);
+3743: updateStockFromExcel(rows, silent);
+3746: function updateStockFromExcel(json, silent = false) {
+3748: if (!silent) alert("ไม่พบข้อมูลในไฟล์ Excel/CSV ที่อัปโหลด");
+
+=== Matches for 'import' ===
+165: white-space: nowrap !important;
+171: white-space: nowrap !important;
+177: white-space: normal !important;
+187: display: block !important;
+188: width: 100% !important;
+192: display: none !important; /* Hide standard headers */
+195: background: rgba(30, 41, 59, 0.4) !important;
+196: border: 1px solid var(--hq-border) !important;
+197: border-radius: 16px !important;
+198: padding: 1rem 1.25rem !important;
+199: margin-bottom: 1rem !important;
+203: background: transparent !important;
+206: border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+207: padding: 0.6rem 0 !important;
+208: display: flex !important;
+209: justify-content: space-between !important;
+210: align-items: center !important;
+211: text-align: right !important;
+212: font-size: 0.85rem !important;
+215: border-bottom: none !important;
+216: padding-top: 0.8rem !important;
+217: justify-content: flex-end !important;
+455: <!-- LEFT: Excel Upload + Imported Preview -->
+481: <button class="btn btn-outline btn-sm" id="clearImportedBtn" style="flex: 1; font-size: 0.78rem; padding: 6px; display: none; border-color: var(--color-danger); color: var(--color-danger);" onclick="clearImportedOrders()">
+487: <!-- STEP 2: Imported Orders Preview (shown after upload) -->
+488: <div class="hq-panel" style="padding: 1.5rem; display: none;" id="importedPreviewPanel">
+492: <span id="importedCountBadge" style="background: rgba(16,185,129,0.15); color: var(--color-success); border-radius: 20px; padding: 2px 10px; font-size: 0.75rem; margin-left: 6px; font-weight: 700;"></span>
+495: <div id="importedOrdersList" style="display: flex; flex-direction: column; gap: 0.5rem; max-height: 300px; overflow-y: auto;">
+2035: importParsedOrders(parsedOrders);
+2048: importParsedOrders(parsedOrders);
+2108: function importParsedOrders(parsedOrders) {
+2117: // Show imported preview panel
+2118: document.getElementById('importedPreviewPanel').style.display = 'block';
+2119: document.getElementById('clearImportedBtn').style.display = 'inline-block';
+2141: const listEl = document.getElementById('importedOrdersList');
+2142: const countBadge = document.getElementById('importedCountBadge');
+2148: document.getElementById('importedPreviewPanel').style.display = 'none';
+2149: document.getElementById('clearImportedBtn').style.display = 'none';
+2324: function clearImportedOrders() {
+
+=== Matches for 'weight' ===
+84: font-weight: 600;
+103: font-weight: 600;
+221: font-weight: bold;
+315: <span style="font-size: 0.8rem; color: var(--hq-text-muted); font-weight: 600;">คลังสินค้า:</span>
+461: <div style="width:28px; height:28px; border-radius:50%; background:var(--color-primary); display:flex; align-items:center; justify-content:center; font-size:0.8rem; font-weight:800; color:white; flex-shrink:0;">1</div>
+462: <h3 style="font-size: 1rem; font-weight: 700; color: white; margin: 0;">อัปโหลดบิล Excel / CSV</h3>
+490: <div style="width:28px; height:28px; border-radius:50%; background: var(--color-success); display:flex; align-items:center; justify-content:center; font-size:0.8rem; font-weight:800; color:white; flex-shrink:0;">✓</div>
+491: <h3 style="font-size: 1rem; font-weight: 700; color: white; margin: 0;">รายการที่นำเข้า
+492: <span id="importedCountBadge" style="background: rgba(16,185,129,0.15); color: var(--color-success); border-radius: 20px; padding: 2px 10px; font-size: 0.75rem; margin-left: 6px; font-weight: 700;"></span>
+507: <div style="width:28px; height:28px; border-radius:50%; background: var(--color-secondary); display:flex; align-items:center; justify-content:center; font-size:0.8rem; font-weight:800; color:white; flex-shrink:0;">2</div>
+508: <h3 style="font-size: 1rem; font-weight: 700; color: white; margin: 0;">มอบหมายขนส่ง</h3>
+513: <label style="font-size: 0.75rem; font-weight: 700; color: var(--hq-text-muted); letter-spacing: 0.8px; text-transform: uppercase; display: block; margin-bottom: 8px;">🏬 เลือกคลังสินค้า</label>
+536: <label style="font-size: 0.75rem; font-weight: 700; color: var(--hq-text-muted); letter-spacing: 0.8px; text-transform: uppercase; display: block; margin-bottom: 8px;">🚚 เลือกขนส่ง</label>
+544: <label style="font-size: 0.75rem; font-weight: 700; color: var(--hq-text-muted); letter-spacing: 0.8px; text-transform: uppercase; display: block; margin-bottom: 8px;">⚙️ โหมด AI จัดเส้นทาง</label>
+548: <span style="font-size:0.65rem; font-weight:normal; display:block;">เดินทางไวสุด</span>
+552: <span style="font-size:0.65rem; font-weight:normal; display:block;">ประหยัดน้ำมัน</span>
+556: <span style="font-size:0.65rem; font-weight:normal; display:block;">นัดหมายสำคัญ</span>
+562: <button id="openRouteBtn" class="btn btn-primary" style="width: 100%; padding: 0.9rem; font-size: 1rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(135deg, var(--color-primary), var(--color-secondary)); opacity: 0.5; pointer-events: none;" onclick="openRouteConfirmModal()">
+571: <div style="width:28px; height:28px; border-radius:50%; background: rgba(245,158,11,0.2); border: 1px solid var(--color-warning); display:flex; align-items:center; justify-content:center; font-size:0.8rem; font-weight:800; color:var(--color-warning); flex-shrink:0;">3</div>
+572: <h3 style="font-size: 1rem; font-weight: 700; color: white; margin: 0;" id="driverQueueTitle">คิวงานคนขับที่เลือก</h3>
+589: <span style="font-size: 0.7rem; text-transform: uppercase; font-weight: 800; color: var(--color-primary); letter-spacing: 2px;">CONFIRM ROUTE</span>
+602: <div style="font-size: 0.75rem; font-weight: 700; color: var(--hq-text-muted); margin-bottom: 0.6rem; letter-spacing: 0.8px; text-transform: uppercase;">จุดส่ง ที่จะเปิด Route</div>
+736: <label style="font-size:0.75rem; color:var(--hq-text-muted); display:block; margin-bottom:4px; font-weight: bold;">ลิงก์ Google Sheet อ้างอิงข้อมูล</label>
+749: <label class="form-label" style="color: var(--hq-text-muted); font-weight: bold;">ชื่อร้านค้า / ชื่อลูกค้า</label>
+758: <label class="form-label" style="color: var(--hq-text-muted); font-weight: bold;">เลือกสินค้าที่รับกลับ</label>
+765: <label class="form-label" style="color: var(--hq-text-muted); font-weight: bold;">จำนวนสินค้า (ชิ้น)</label>
+771: <!-- Column 2: Weight & Warehousing Info -->
+775: <label class="form-label" style="color: var(--hq-text-muted); font-weight: bold;">คำนวณน้ำหนัก (กก.)</label>
+776: <input type="number" id="returnWeight" step="0.1" required style="width: 100%; padding: 0.6rem; border-radius: 8px; border: 1px solid var(--hq-border); background: rgba(255,255,255,0.03); color: white; font-size: 0.85rem;" />
+779: <label class="form-label" style="color: var(--hq-text-muted); font-weight: bold;">คลังสินค้าปลายทาง</label>
+790: <label class="form-label" style="color: var(--hq-text-muted); font-weight: bold;">พื้นที่/โซน (พิกัดจัดส่ง)</label>
+801: <label class="form-label" style="color: var(--hq-text-muted); font-weight: bold;">มอบหมายงานให้คนขับ</label>
+811: <label class="form-label" style="color: var(--hq-text-muted); font-weight: bold;">สาเหตุรับคืน / หมายเหตุเพิ่มเติม</label>
+815: <button type="submit" class="btn btn-primary" style="padding: 0.8rem; font-size: 0.95rem; font-weight: 700; background: linear-gradient(135deg, #8b5cf6, #6366f1); border: none; margin-top: 0.5rem; cursor: pointer;">
+863: <div id="stockSyncStatus" style="font-size: 0.75rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; background: rgba(255,255,255,0.03); border: 1px solid var(--hq-border); color: var(--hq-text-muted);">
+869: <button class="btn btn-outline" onclick="toggleStockSheetSettings()" style="padding: 0.45rem 0.9rem; font-size: 0.8rem; font-weight: bold; border-color: rgba(255,255,255,0.15); display: flex; align-items: center; gap: 6px;">
+875: <h4 style="font-size:0.85rem; color:white; font-weight:bold; margin-bottom:0.5rem; display:flex; align-items:center; gap:6px;">📊 ตั้งค่าลิงก์ Google Sheet สต็อก</h4>
+888: <button onclick="syncStockFromGoogleSheet()" class="btn btn-outline" style="padding: 0.45rem 0.9rem; font-size: 0.8rem; font-weight: bold; border-color: var(--color-success); color: var(--color-success); display: flex; align-items: center; gap: 6px;">
+893: <button onclick="downloadSampleStockCSV()" class="btn btn-outline" style="padding: 0.45rem 0.9rem; font-size: 0.8rem; font-weight: bold; border-color: #10b981; color: #10b981; display: flex; align-items: center; gap: 6px; background: rgba(16, 185, 129, 0.02);">
+898: <button onclick="document.getElementById('stockExcelFileInput').click()" class="btn btn-primary" style="padding: 0.45rem 1rem; font-size: 0.8rem; font-weight: 700; background: linear-gradient(135deg, #0284c7, #0369a1); border: none; display: flex; align-items: center; gap: 6px;">
+925: <span style="font-size: 0.78rem; color: var(--hq-text-muted); font-weight: 600;">คลังสินค้า:</span>
+972: <span style="font-size: 0.75rem; text-transform: uppercase; font-weight: bold; color: var(--color-primary); letter-spacing: 1.5px;">รอตรวจสอบหลักฐาน</span>
+1000: <label class="form-label" style="font-weight:700; color:white;">หมายเหตุจากแอดมิน</label>
+1019: <a id="downloadPodLink" href="#" target="_blank" download="pod_proof.jpg" style="margin-top:10px; font-size:0.75rem; color:var(--color-info); text-align:center; font-weight:600; text-decoration:none; display:none;" class="download-btn-trigger">
+1038: <a id="downloadPayLink" href="#" target="_blank" download="payment_slip.jpg" style="margin-top:10px; font-size:0.75rem; color:var(--color-info); text-align:center; font-weight:600; text-decoration:none; display:none;" class="download-btn-trigger">
+1058: <span style="font-size: 0.75rem; text-transform: uppercase; font-weight: bold; color: var(--color-warning); letter-spacing: 1.5px;">คำขอปรับเปลี่ยนคิวขนส่ง</span>
+1067: <h4 style="color: var(--hq-text-muted); font-size: 0.85rem; border-bottom: 1px solid var(--hq-border); padding-bottom: 0.5rem; margin-bottom: 0.8rem; font-weight: bold;">ลำดับปัจจุบัน</h4>
+1075: <h4 style="color: var(--color-warning); font-size: 0.85rem; border-bottom: 1px solid rgba(245,158,11,0.15); padding-bottom: 0.5rem; margin-bottom: 0.8rem; font-weight: bold;">ลำดับที่ขอปรับเปลี่ยน</h4>
+1095: <span style="font-size: 0.75rem; text-transform: uppercase; font-weight: bold; color: var(--color-secondary); letter-spacing: 1.5px;">DRIVER ROUTE REPORT</span>
+1105: <div id="reportTotalJobs" style="font-size: 1.25rem; font-weight: bold; color: white; margin-top: 4px;">0</div>
+1109: <div id="reportCompletedJobs" style="font-size: 1.25rem; font-weight: bold; color: var(--color-success); margin-top: 4px;">0</div>
+1113: <div id="reportCurrentJob" style="font-size: 0.95rem; font-weight: bold; color: var(--color-primary); margin-top: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">-</div>
+1513: fontWeight: 'bold',
+1522: strokeWeight: 2.5
+1573: fontWeight: 'bold',
+1582: strokeWeight: 1.5
+1610: strokeWeight: 1.5
+1647: strokeWeight: 3.8,
+1697: strokeWeight: 3.8,
+1711: strokeWeight: 3.5,
+1739: fontWeight: 'bold',
+1748: strokeWeight: 2
+1765: let strokeWeight = 2;
+1775: strokeWeight = 3;
+1784: fontWeight: 'bold',
+1793: strokeWeight: strokeWeight
+1814: strokeWeight: 2
+1871: `<span style="background:rgba(37, 99, 235, 0.1); color:var(--color-primary); padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:bold;">คนขับประจำ</span>` :
+1872: `<span style="background:rgba(139, 92, 246, 0.1); color:var(--color-secondary); padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:bold;">ขนส่งนอก</span>`;
+1876: <td style="font-family:var(--font-heading); font-weight:600;">${drv.id}</td>
+1882: <td><span style="color: var(--color-secondary); font-weight: 600;">${drv.warehouse || 'สุขสวัสดิ์'}</span></td>
+2001: totalWeight: 0,
+2080: let totalWeight = 0;
+2082: totalWeight += item.weight * item.qty;
+2093: totalWeight: totalWeight,
+2161: <span style="font-weight: 700; color: white;">${ord.customerName}</span>
+2163: ${ord.id} • คลัง: ${ord.warehouse} • น้ำหนัก: ${ord.totalWeight.toLocaleString()} กก.
+2166: <span style="font-size: 0.72rem; padding: 2px 8px; border-radius: 12px; background: rgba(37,99,235,0.15); color: var(--color-primary); font-weight: 700; align-self: center;">
+2213: const totalWeight = driverOrders.reduce((sum, o) => sum + (parseFloat(o.totalWeight) || 0), 0);
+2225: <span class="payload-weight-text" style="font-size: 0.72rem; color: var(--color-primary); display: block; margin-top: 2px;">
+2226: ⚖️ บรรทุก: ${totalWeight.toLocaleString()} กก.
+2230: <span style="font-size: 0.72rem; font-weight: 700; color: var(--color-secondary); display: block;">[${vehText}]</span>
+2263: const totalWeight = orders.reduce((sum, o) => sum + (parseFloat(o.totalWeight) || 0), 0);
+2272: const payloadWeightEl = activeCard.querySelector('.payload-weight-text');
+2273: if (payloadWeightEl) {
+2274: payloadWeightEl.textContent = `⚖️ บรรทุก: ${totalWeight.toLocaleString()} กก.`;
+2286: titleEl.textContent = `คิวงานของ ${drv.name.split(' ')[0]} (บรรทุกรวม: ${totalWeight.toLocaleString()} กก.)`;
+2307: <span style="font-family: var(--font-heading); font-weight: 700; color: var(--color-primary); margin-right: 8px;">#${ord.routeSequence}</span>
+2309: <span style="font-size: 0.72rem; color: var(--hq-text-muted); margin-left: 8px;">(น้ำหนัก: ${ord.totalWeight.toLocaleString()} กก.${remarksText})</span>
+2352: let totalNewWeight = 0;
+2354: totalNewWeight += o.totalWeight;
+2383: <strong>${totalNewWeight.toLocaleString()} กิโลกรัม</strong>
+2396: <span style="color: var(--color-primary); font-weight: 700; margin-right: 6px;">#${index + 1}</span>
+2399: <span style="color: var(--hq-text-muted); font-size: 0.75rem;">${o.totalWeight.toLocaleString()} กก.</span>
+2527: <span style="font-family:var(--font-heading); font-weight:700; color:var(--color-primary); margin-right:8px;">#${ord.routeSequence}</span>
+2639: <td style="font-family:var(--font-heading); font-weight:600;">${ord.id}</td>
+2641: <td><span style="font-size:0.8rem; color:var(--hq-text-muted); font-weight:bold;">${ord.warehouse}</span></td>
+2806: <td style="font-weight:bold; color:var(--color-primary);">${row.orderId}</td>
+2808: <td><span style="font-weight:bold; color:var(--color-secondary);">${row.warehouse}</span></td>
+2811: <td style="text-transform:uppercase; font-weight:bold; color:#b45309;">${row.paymentStatus}</td>
+2812: <td><span style="font-weight:bold; color:${row.status === 'success' ? '#0f9d58' : '#ef4444'};">${row.status.toUpperCase()}</span></td>
+3046: productDatalist.innerHTML += `<option value="${p.id} - ${p.name} (${p.weight} กก.)"></option>`;
+3116: <td>${ret.totalWeight} กก.</td>
+3127: let weight = 0;
+3134: weight = prod.weight * qty;
+3140: weight = standardProd.weight * qty;
+3144: weight = parseFloat(hint[1]) * qty;
+3148: document.getElementById('returnWeight').value = weight;
+3155: const weight = parseFloat(document.getElementById('returnWeight').value) || 0;
+3171: weight: weight / qty
+3186: totalWeight: weight,
+3204: document.getElementById('returnWeight').value = 0;
+3326: <span style="font-size: 1.1rem; color: white; font-weight: 700;">${drv.name}</span>
+3381: <div style="width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-family: var(--font-heading); font-size: 0.9rem; flex-shrink: 0; background: ${circleBg}; margin-top: 4px;">
+3385: <span style="font-size: 0.95rem; font-weight: bold; color: white;">${ord.customerName}</span>
+3390: <span style="font-size: 0.7rem; font-weight: bold; padding: 4px 10px; border-radius: 20px; align-self: center; background: ${badgeBg}; color: ${badgeColor};">
+3534: { id: "p6", name: "ท่อ PVC (PVC Pipe)", weight: 2.5, qty: 350, warehouse: "สุขสวัสดิ์", lastUpdated: "08:35:00 16/06/2026 (อัปเกรด)" },
+3535: { id: "p7", name: "อิฐบล็อก (Concrete Block)", weight: 1.8, qty: 1200, warehouse: "สุขสวัสดิ์", lastUpdated: "08:35:00 16/06/2026 (อัปเกรด)" },
+3536: { id: "p8", name: "แปรงทาสี (Paint Brush)", weight: 0.2, qty: 600, warehouse: "พัทยา", lastUpdated: "08:35:00 16/06/2026 (อัปเกรด)" },
+3537: { id: "p9", name: "นั่งร้านเหล็ก (Steel Scaffolding)", weight: 35, qty: 40, warehouse: "พัทยา", lastUpdated: "08:35:00 16/06/2026 (อัปเกรด)" },
+3538: { id: "p10", name: "แผ่นเมทัลชีท (Metal Sheet)", weight: 14, qty: 150, warehouse: "พัทยา", lastUpdated: "08:35:00 16/06/2026 (อัปเกรด)" },
+3539: { id: "p11", name: "หน้าต่าง UPVC (UPVC Window)", weight: 18, qty: 90, warehouse: "โคราช", lastUpdated: "08:35:00 16/06/2026 (อัปเกรด)" },
+3540: { id: "p12", name: "ประตูไม้ (Wooden Door)", weight: 25, qty: 35, warehouse: "โคราช", lastUpdated: "08:35:00 16/06/2026 (อัปเกรด)" },
+3541: { id: "p13", name: "สกรูยึดไม้ (Wood Screws Box)", weight: 1.2, qty: 500, warehouse: "โคราช", lastUpdated: "08:35:00 16/06/2026 (อัปเกรด)" },
+3542: { id: "p14", name: "ตลับเมตร (Measuring Tape)", weight: 0.3, qty: 450, warehouse: "ปราจีนบุรี", lastUpdated: "08:35:00 16/06/2026 (อัปเกรด)" },
+3543: { id: "p15", name: "สว่านไฟฟ้า (Electric Drill)", weight: 3.2, qty: 80, warehouse: "ปราจีนบุรี", lastUpdated: "08:35:00 16/06/2026 (อัปเกรด)" },
+3544: { id: "p16", name: "เลื่อยวงเดือน (Circular Saw)", weight: 5.5, qty: 25, warehouse: "ปราจีนบุรี", lastUpdated: "08:35:00 16/06/2026 (อัปเกรด)" }
+3623: const weight = (p.weight !== undefined && p.weight !== null) ? p.weight : 0;
+3626: statusBadge = '<span class="badge badge-danger" style="background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: bold;">สินค้าหมด</span>';
+3628: statusBadge = '<span class="badge badge-warning" style="background: rgba(245, 158, 11, 0.2); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: bold;">สต็อกต่ำ</span>';
+3630: statusBadge = '<span class="badge badge-success" style="background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: bold;">ปกติ</span>';
+3635: <td data-label="รหัสสินค้า" style="font-family: var(--font-heading); font-weight: 600;">${p.id || '-'}</td>
+3638: <td data-label="คลังสินค้า"><span style="font-size:0.8rem; color:var(--hq-text-muted); font-weight:bold;">${p.warehouse || 'สุขสวัสดิ์'}</span></td>
+3639: <td data-label="น้ำหนักต่อหน่วย"><span style="color: var(--color-primary); font-weight: 600;">${weight.toLocaleString()} กก.</span></td>
+3767: const weightValRaw = getRowVal(row, ["น้ำหนัก", "น้ำหนักต่อหน่วย", "weight", "Weight"]);
+3773: const weight = (weightValRaw !== null && weightValRaw !== undefined) ? parseFloat(String(weightValRaw).replace(/,/g, '')) : null;
+3786: if (weight !== null && !isNaN(weight)) updatedProducts[idx].weight = weight;
+3794: weight: (weight !== null && !isNaN(weight)) ? weight : 10,
+
+=== Matches for 'capacity' ===
+
+=== Matches for 'optimize' ===
+546: <button class="opt-mode-btn active" id="newOptBtn-fastest" onclick="setOptimizeMode('fastest')">
+550: <button class="opt-mode-btn" id="newOptBtn-eco" onclick="setOptimizeMode('eco')">
+554: <button class="opt-mode-btn" id="newOptBtn-priority" onclick="setOptimizeMode('priority')">
+1202: let currentOptimizeMode = 'fastest';
+2438: let optimizedPending = optimizeRoutes(pendingStops, currentOptimizeMode);
+2444: optimizedPending.forEach((ord, i) => {
+2497: function loadDriverOrdersToOptimize() {
+2499: const listContainer = document.getElementById('optimizedStopsList');
+2537: function setOptimizeMode(mode) {
+2538: currentOptimizeMode = mode;
+2567: let optimizedPending = optimizeRoutes(pendingStops, currentOptimizeMode);
+2574: optimizedPending.forEach((ord, index) => {
+2588: loadDriverOrdersToOptimize();
+2590: alert(`ประมวลผลและเรียงลำดับเส้นทางใหม่สำเร็จ (โหมด: ${currentOptimizeMode.toUpperCase()})`);
+
+=== Matches for 'route' ===
+153: .route-stop-report-row {
+158: .route-stop-report-row:hover {
+562: <button id="openRouteBtn" class="btn btn-primary" style="width: 100%; padding: 0.9rem; font-size: 1rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(135deg, var(--color-primary), var(--color-secondary)); opacity: 0.5; pointer-events: none;" onclick="openRouteConfirmModal()">
+563: 🚀 ยืนยันเปิด Route ขนส่ง
+584: <!-- ROUTE CONFIRM MODAL -->
+585: <div class="modal" id="routeConfirmModal" onclick="closeRouteConfirmModal(event)">
+589: <span style="font-size: 0.7rem; text-transform: uppercase; font-weight: 800; color: var(--color-primary); letter-spacing: 2px;">CONFIRM ROUTE</span>
+590: <h2 style="color: white; font-family: var(--font-heading); margin-top: 3px; font-size: 1.2rem;">ยืนยันเปิด Route ขนส่ง</h2>
+592: <button onclick="closeRouteConfirmModal()" style="background:none; border:none; color: var(--hq-text-muted); font-size:1.5rem; cursor:pointer;">✕</button>
+596: <div id="routeConfirmSummary" style="background: rgba(37,99,235,0.08); border: 1px solid rgba(37,99,235,0.2); border-radius: 16px; padding: 1.2rem; margin-bottom: 1.2rem;">
+600: <!-- Route stops preview -->
+602: <div style="font-size: 0.75rem; font-weight: 700; color: var(--hq-text-muted); margin-bottom: 0.6rem; letter-spacing: 0.8px; text-transform: uppercase;">จุดส่ง ที่จะเปิด Route</div>
+603: <div id="routeConfirmStopsList" style="display: flex; flex-direction: column; gap: 0.4rem; max-height: 200px; overflow-y: auto;">
+608: <button class="btn btn-outline" style="flex: 1;" onclick="closeRouteConfirmModal()">ยกเลิก</button>
+609: <button class="btn btn-primary" style="flex: 2; background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));" onclick="confirmAndOpenRoute()">
+610: ✅ ยืนยัน เปิด Route
+1090: <!-- DRIVER ROUTE REPORT MODAL -->
+1091: <div class="modal" id="driverRouteReportModal" onclick="closeDriverRouteReportModal(event)">
+1095: <span style="font-size: 0.75rem; text-transform: uppercase; font-weight: bold; color: var(--color-secondary); letter-spacing: 1.5px;">DRIVER ROUTE REPORT</span>
+1098: <button onclick="hideDriverRouteReportModal()" style="background:none; border:none; color: var(--hq-text-muted); font-size:1.5rem; cursor:pointer;">✕</button>
+1117: <!-- Route Map Preview matching driver view -->
+1122: <!-- Route Stop List -->
+1124: <div id="reportRouteStopList" style="display: flex; flex-direction: column; gap: 1rem;">
+1347: <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--hq-border); padding: 1rem; border-radius: 16px; display:flex; flex-direction:column; gap:0.5rem; cursor:pointer;" onclick="showDriverRouteReport('${drv.id}')">
+1390: return a.routeSequence - b.routeSequence;
+1539: .sort((a,b) => a.routeSequence - b.routeSequence);
+1544: const routeColor = colorsList[drvIdx % colorsList.length];
+1546: const routeCoords = [depotPos];
+1560: routeCoords.push(ordPos);
+1571: text: String(ord.routeSequence),
+1594: getGoogleDirections(drv.id, driverOrders, routeColor, mainGoogleMap, mainMapPolylines);
+1606: fillColor: routeColor,
+1620: showDriverRouteReport(drv.id);
+1633: function getGoogleDirections(driverId, orders, routeColor, mapInstance, polylinesArray) {
+1645: strokeColor: routeColor,
+1676: directionsService.route(request, (response, status) => {
+1678: const routePath = [];
+1679: const legs = response.routes[0].legs;
+1685: routePath.push({ lat: path[k].lat(), lng: path[k].lng() });
+1690: directionsCache[cacheKey] = routePath;
+1693: path: routePath,
+1695: strokeColor: routeColor,
+1709: strokeColor: routeColor,
+1754: const routeCoords = [depotPos];
+1760: routeCoords.push(jobPos);
+1782: text: String(job.routeSequence),
+1795: title: `${job.customerName} - จุดที่ #${job.routeSequence}`
+1934: const openRouteBtn = document.getElementById('openRouteBtn');
+1935: if (openRouteBtn) {
+1936: openRouteBtn.style.opacity = '0.5';
+1937: openRouteBtn.style.pointerEvents = 'none';
+2007: routeSequence: orders.filter(o => o.assignedDriverId === driverId).length + 1,
+2098: routeSequence: 0,
+2183: const openRouteBtn = document.getElementById('openRouteBtn');
+2184: if (openRouteBtn) {
+2185: openRouteBtn.style.opacity = '0.5';
+2186: openRouteBtn.style.pointerEvents = 'none';
+2246: const openRouteBtn = document.getElementById('openRouteBtn');
+2247: if (openRouteBtn) {
+2249: openRouteBtn.style.opacity = '1';
+2250: openRouteBtn.style.pointerEvents = 'auto';
+2252: openRouteBtn.style.opacity = '0.5';
+2253: openRouteBtn.style.pointerEvents = 'none';
+2294: orders.sort((a, b) => a.routeSequence - b.routeSequence);
+2307: <span style="font-family: var(--font-heading); font-weight: 700; color: var(--color-primary); margin-right: 8px;">#${ord.routeSequence}</span>
+2330: const openRouteBtn = document.getElementById('openRouteBtn');
+2331: if (openRouteBtn) {
+2332: openRouteBtn.style.opacity = '0.5';
+2333: openRouteBtn.style.pointerEvents = 'none';
+2338: function openRouteConfirmModal() {
+2357: const summaryEl = document.getElementById('routeConfirmSummary');
+2389: const stopsListEl = document.getElementById('routeConfirmStopsList');
+2405: document.getElementById('routeConfirmModal').classList.add('active');
+2408: function closeRouteConfirmModal(e) {
+2409: if (!e || e.target === document.getElementById('routeConfirmModal')) {
+2410: document.getElementById('routeConfirmModal').classList.remove('active');
+2414: function confirmAndOpenRoute() {
+2425: newOrd.routeSequence = currentQueueCount + index + 1;
+2434: let finishedStops = driverOrders.filter(o => o.status === 'success' || o.status === 'failed').sort((a,b)=>a.routeSequence - b.routeSequence);
+2438: let optimizedPending = optimizeRoutes(pendingStops, currentOptimizeMode);
+2441: ord.routeSequence = i + 1;
+2445: ord.routeSequence = finishedStops.length + i + 1;
+2464: document.getElementById('routeConfirmModal').classList.remove('active');
+2466: alert("✅ ยืนยันและมอบหมายงานเปิด Route ขนส่งสำเร็จ!");
+2514: orders.sort((a,b) => a.routeSequence - b.routeSequence);
+2527: <span style="font-family:var(--font-heading); font-weight:700; color:var(--color-primary); margin-right:8px;">#${ord.routeSequence}</span>
+2559: let finishedStops = driverOrders.filter(o => o.status === 'success' || o.status === 'failed').sort((a,b)=>a.routeSequence - b.routeSequence);
+2567: let optimizedPending = optimizeRoutes(pendingStops, currentOptimizeMode);
+2571: ord.routeSequence = index + 1;
+2575: ord.routeSequence = finishedStops.length + index + 1;
+2904: driverOrders.sort((a, b) => a.routeSequence - b.routeSequence);
+2922: ord.routeSequence = idx + 1;
+2997: ord.routeSequence = idx + 1;
+3192: routeSequence: seq,
+3222: driverOrders.sort((a, b) => a.routeSequence - b.routeSequence);
+3229: <strong>#${o.routeSequence}</strong> ${o.customerName}
+3279: ord.routeSequence = idx + 1;
+3313: function showDriverRouteReport(driverId) {
+3322: .sort((a,b) => a.routeSequence - b.routeSequence);
+3345: const listContainer = document.getElementById('reportRouteStopList');
+3380: <div class="route-stop-report-row" onclick="showPodDetails('${ord.id}')" style="display: flex; align-items: flex-start; gap: 12px; padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer;">
+3398: document.getElementById('driverRouteReportModal').classList.add('active');
+3418: function hideDriverRouteReportModal() {
+3419: document.getElementById('driverRouteReportModal').classList.remove('active');
+3460: ord.routeSequence = 0;
+3474: ord.routeSequence = orders.filter(o => o.assignedDriverId === newDriverId).length + 1;
+3476: ord.routeSequence = 0;
+3485: function closeDriverRouteReportModal(e) {
+3486: if (e.target === document.getElementById('driverRouteReportModal')) {
+3487: hideDriverRouteReportModal();
+
+=== Matches for 'swap' ===
+
+=== Matches for 'change' ===
+316: <select id="dashboardWarehouseFilter" class="form-select" style="padding: 0.3rem 1.8rem 0.3rem 0.6rem; font-size: 0.8rem; border-color: transparent; background-color: transparent;" onchange="handleWarehouseFilterChange()">
+474: <input type="file" id="excelFileInput" style="display: none;" accept=".xlsx, .xls, .csv" onchange="handleExcelFileUpload(this)">
+901: <input type="file" id="stockExcelFileInput" style="display: none;" accept=".xlsx, .xls, .csv" onchange="handleStockExcelUpload(this)">
+926: <select id="stockWarehouseFilter" class="form-select" style="padding: 0.1rem 1.8rem 0.1rem 0.6rem; font-size: 0.78rem; border-color: transparent; background-color: transparent; color: white;" onchange="handleStockWarehouseFilterChange()">
+1188: handleWarehouseFilterChange();
+1250: function handleWarehouseFilterChange() {
+3424: let html = `<select class="table-select" onchange="handleOrderWarehouseChange('${orderId}', this.value)">`;
+3435: let html = `<select class="table-select" onchange="handleOrderDriverChange('${orderId}', this.value)">`;
+3454: function handleOrderWarehouseChange(orderId, newWarehouse) {
+3468: function handleOrderDriverChange(orderId, newDriverId) {
+3564: function handleStockWarehouseFilterChange() {
+
+=== Matches for 'assign' ===
+450: TAB 2: ROUTING & ASSIGNMENT (REDESIGNED)
+501: <!-- RIGHT: Assignment Panel -->
+515: <button class="warehouse-sel-btn" data-wh="พัทยา" onclick="selectAssignWarehouse('พัทยา', this)">
+519: <button class="warehouse-sel-btn" data-wh="โคราช" onclick="selectAssignWarehouse('โคราช', this)">
+523: <button class="warehouse-sel-btn" data-wh="สุขสวัสดิ์" onclick="selectAssignWarehouse('สุขสวัสดิ์', this)">
+527: <button class="warehouse-sel-btn" data-wh="ปราจีนบุรี" onclick="selectAssignWarehouse('ปราจีนบุรี', this)">
+1206: let selectedAssignWarehouseName = '';
+1207: let selectedAssignDriverId = '';
+1327: const driverOrders = orders.filter(o => o.assignedDriverId === drv.id);
+1387: if (a.assignedDriverId !== b.assignedDriverId) {
+1388: return String(a.assignedDriverId).localeCompare(String(b.assignedDriverId));
+1394: const driverObj = drivers.find(d => d.id === ord.assignedDriverId);
+1424: <td>${renderDriverSelect(ord.id, ord.assignedDriverId, ord.warehouse)}</td>
+1538: .filter(o => o.assignedDriverId === drv.id)
+1800: getGoogleDirections(myJobs[0] ? (myJobs[0].assignedDriverId || 'report') : 'report', myJobs, '#3b82f6', reportGoogleMap, reportMapPolylines);
+1918: selectedAssignWarehouseName = '';
+1919: selectedAssignDriverId = '';
+1948: const assignSelect = document.getElementById('orderAssignDriver');
+1949: assignSelect.innerHTML = '';
+1952: assignSelect.innerHTML = `<option value="">⚠️ คลัง ${selectedWarehouse} ยังไม่มีคนขับได้รับการอนุมัติ</option>`;
+1954: assignSelect.innerHTML = `<option value="">-- เลือกคนจัดส่งของคลัง ${selectedWarehouse} --</option>`;
+1958: assignSelect.innerHTML += `<option value="${d.id}">${d.name} (${d.plate} - ทะเบียน ${d.plateProvince || 'กรุงเทพฯ'}) [${vehText}]</option>`;
+1983: const driverId = document.getElementById('orderAssignDriver').value;
+2006: assignedDriverId: driverId,
+2007: routeSequence: orders.filter(o => o.assignedDriverId === driverId).length + 1,
+2097: assignedDriverId: null,
+2123: // If warehouse was already selected, update driver selector to check assignments
+2124: if (selectedAssignWarehouseName) {
+2125: selectAssignWarehouse(selectedAssignWarehouseName, document.querySelector(`.warehouse-sel-btn[data-wh="${selectedAssignWarehouseName}"]`));
+2174: function selectAssignWarehouse(whName, btn) {
+2179: selectedAssignWarehouseName = whName;
+2180: selectedAssignDriverId = ''; // reset driver selection
+2210: const driverOrders = orders.filter(o => o.assignedDriverId === drv.id);
+2219: <div class="driver-sel-card" data-drvid="${drv.id}" onclick="selectAssignDriver('${drv.id}', this)" style="margin-bottom: 0.4rem;">
+2238: function selectAssignDriver(drvId, card) {
+2243: selectedAssignDriverId = drvId;
+2262: const orders = DB.get("orders").filter(o => o.assignedDriverId === drvId);
+2343: if (!selectedAssignDriverId) {
+2348: const drv = DB.get("drivers").find(d => d.id === selectedAssignDriverId);
+2363: <strong>${selectedAssignWarehouseName}</strong>
+2415: if (tempUploadedOrders.length === 0 || !selectedAssignDriverId) return;
+2418: const driverId = selectedAssignDriverId;
+2419: const currentQueueCount = allOrders.filter(o => o.assignedDriverId === driverId).length;
+2421: // Process and assign new orders
+2423: newOrd.assignedDriverId = driverId;
+2424: newOrd.warehouse = selectedAssignWarehouseName;
+2433: const driverOrders = allOrders.filter(o => o.assignedDriverId === driverId);
+2449: let otherOrders = allOrders.filter(o => o.assignedDriverId !== driverId);
+2507: const orders = DB.get("orders").filter(o => o.assignedDriverId === driverId);
+2551: let driverOrders = allOrders.filter(o => o.assignedDriverId === driverId);
+2552: let otherOrders = allOrders.filter(o => o.assignedDriverId !== driverId);
+2616: const drv = drivers.find(d => d.id === ord.assignedDriverId);
+2667: const drv = drivers.find(d => d.id === ord.assignedDriverId);
+2903: let driverOrders = orders.filter(o => o.assignedDriverId === driverId);
+2934: selectAssignDriver(driverId, activeCard);
+2992: let driverOrders = orders.filter(o => o.assignedDriverId === driverId);
+3002: if (o.assignedDriverId === driverId) {
+3012: selectAssignDriver(driverId, activeCard);
+3099: const drv = drivers.find(d => d.id === ret.assignedDriverId);
+3175: const driverOrders = orders.filter(o => o.assignedDriverId === driverId);
+3191: assignedDriverId: driverId,
+3221: const driverOrders = orders.filter(o => o.assignedDriverId === driverId);
+3274: let driverOrders = orders.filter(o => o.assignedDriverId === activeQueueRequestDriverId);
+3284: if (o.assignedDriverId === activeQueueRequestDriverId) {
+3309: selectAssignDriver(activeId, activeCard);
+3321: .filter(o => o.assignedDriverId === driverId)
+3459: ord.assignedDriverId = null;
+3472: ord.assignedDriverId = newDriverId || null;
+3474: ord.routeSequence = orders.filter(o => o.assignedDriverId === newDriverId).length + 1;

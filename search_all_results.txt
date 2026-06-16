@@ -1,0 +1,140 @@
+====== FILE: driver.html ======
+=== Matches for 'drivers' ===
+29: /* Enhancements for Older Drivers - Large text and simplified layout */
+525: <select id="existingDriverSelect" class="form-select account-switcher-select" style="margin-top:0.5rem; width:100%; font-size:0.85rem;" onchange="loginAsExistingDriver()">
+763: <div id="driverSuccessModal" class="success-overlay">
+838: const drivers = DB.get("drivers");
+841: const selectEl = document.getElementById('existingDriverSelect');
+842: const regularDrivers = drivers.filter(d => d.driverType === 'regular' || !d.driverType);
+843: const externalDrivers = drivers.filter(d => d.driverType === '3pl');
+847: if (regularDrivers.length > 0) {
+849: regularDrivers.forEach(d => {
+857: if (externalDrivers.length > 0) {
+859: externalDrivers.forEach(d => {
+870: const currentDrv = drivers.find(d => d.id === savedDriverId);
+952: const drivers = DB.get("drivers", []);
+953: const target = drivers.find(d => d.driverType === 'regular' && d.username === user && d.password === pass);
+983: const drivers = DB.get("drivers", []);
+984: const exists = drivers.some(d => d.username && d.username.toLowerCase() === user.toLowerCase());
+1006: drivers.push(newDriverObj);
+1007: DB.set("drivers", drivers);
+1012: document.getElementById('driverSuccessModal').classList.add('active');
+1037: const drivers = DB.get("drivers");
+1038: drivers.push(newDriverObj);
+1039: DB.set("drivers", drivers);
+1044: document.getElementById('driverSuccessModal').classList.add('active');
+1048: document.getElementById('driverSuccessModal').classList.remove('active');
+1056: const selectVal = document.getElementById('existingDriverSelect').value;
+1063: document.getElementById('existingDriverSelect').value = '';
+1075: const drivers = DB.get("drivers");
+1077: const currentDrv = drivers.find(d => d.id === currentId);
+1090: const targetDrv = drivers.find(d => d.id === targetDriverId);
+1118: document.getElementById('existingDriverSelect').value = '';
+1184: const drivers = DB.get("drivers");
+1185: const myDrv = drivers.find(d => d.id === currentDriverId);
+1197: const drivers = DB.get("drivers");
+1198: const myDrv = drivers.find(d => d.id === currentDriverId);
+1216: const drivers = DB.get("drivers");
+1217: const myInfo = drivers.find(d => d.id === currentDriverId);
+1258: const drivers = DB.get("drivers");
+1262: const myInfo = drivers.find(d => d.id === currentDriverId);
+
+=== Matches for 'maxWeight' ===
+
+=== Matches for 'weight' ===
+36: font-weight: 700 !important;
+55: font-weight: 700 !important;
+62: font-weight: 700 !important;
+67: font-weight: 600 !important;
+78: font-weight: 600 !important;
+83: font-weight: 700 !important;
+89: font-weight: 800 !important;
+95: font-weight: 800 !important;
+110: font-weight: 800 !important;
+115: font-weight: 700 !important;
+139: font-weight: 800 !important;
+170: font-weight: 800 !important;
+177: font-weight: 800 !important;
+210: font-weight: 700 !important;
+272: font-weight: bold;
+308: font-weight: 700 !important;
+332: font-weight: bold !important;
+340: font-weight: 600 !important;
+409: <a href="#" onclick="showRegularDriverRegister(event)" style="font-size: 0.9rem; color: var(--color-secondary); font-weight: bold; text-decoration: underline;">
+469: <a href="#" onclick="showRegularDriverLogin(event)" style="font-size: 0.9rem; color: var(--color-primary); font-weight: bold; text-decoration: underline;">
+524: <p style="font-size:0.8rem; color:var(--driver-text-muted); font-weight:600; margin-bottom:0.5rem;">🔄 สลับไปบัญชีคนขับที่มีในระบบ:</p>
+547: คุณ <span id="waitName" style="color: var(--driver-text-main); font-weight: bold;"></span> ขอบคุณที่ร่วมจัดส่ง! ระบบได้รับข้อมูลของท่านแล้ว กรุณารอเจ้าหน้าที่แอดมินหลังบ้าน (Admin HQ) ประจำคลังกดยอมรับอนุมัติเข้าใช้งาน
+628: <div id="queueRequestStatus" style="display: none; background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.25); border-radius: 8px; padding: 0.6rem 0.8rem; margin: 0.5rem 1rem 0.5rem; color: var(--color-warning); font-size: 0.75rem; font-weight: 600; text-align: center;">
+664: <label class="form-label" style="color: var(--driver-text-muted); font-weight: bold;" id="photoUploadLabelText">
+703: <label class="form-label" style="color: var(--driver-text-muted); font-weight:700;">2. ชำระค่าบริการปลายทาง (COD)</label>
+704: <div style="font-size:0.85rem; margin-top:0.4rem; color: #b45309; font-weight:bold;">
+1400: `<span style="font-size:1.1rem; font-weight:bold;">${activeJob.remarks}</span>` +
+1525: strokeWeight: 3.8,
+1575: strokeWeight: 3.8,
+1589: strokeWeight: 3.5,
+1619: fontWeight: 'bold',
+1628: strokeWeight: 2
+1645: let strokeWeight = 2;
+1655: strokeWeight = 3;
+1664: fontWeight: 'bold',
+1673: strokeWeight: strokeWeight
+1694: strokeWeight: 2
+
+=== Matches for 'capacity' ===
+
+=== Matches for 'assignedDriverId' ===
+1226: let driverOrders = orders.filter(o => o.assignedDriverId === currentDriverId);
+1233: if (o.assignedDriverId === currentDriverId) {
+1272: let myJobs = orders.filter(o => o.assignedDriverId === currentDriverId);
+1450: let myJobs = orders.filter(o => o.assignedDriverId === currentDriverId);
+1757: const activeRoute = DB.get("orders").filter(o => o.assignedDriverId === currentDriverId).sort((a,b)=>a.routeSequence - b.routeSequence);
+
+====== FILE: super.html ======
+=== Matches for 'drivers' ===
+387: renderSuperDriversTable();
+427: const drivers = DB.get("drivers", []);
+446: // Add drivers
+447: drivers.forEach(drv => {
+514: const drivers = DB.get("drivers", []);
+515: const drv = drivers.find(d => d.id === id);
+518: DB.set("drivers", drivers);
+697: const drivers = DB.get("drivers", []);
+698: const exists = drivers.some(d => d.username && d.username.toLowerCase() === usernameVal.toLowerCase());
+721: drivers.push(newDrv);
+722: DB.set("drivers", drivers);
+735: // Drivers CRUD Render & Controls
+737: function renderSuperDriversTable() {
+738: const drivers = DB.get("drivers", []);
+742: if (drivers.length === 0) {
+747: // Sort pending drivers first
+748: const sortedDrivers = [...drivers].sort((a, b) => {
+761: sortedDrivers.forEach(drv => {
+775: <button class="btn btn-primary btn-sm" onclick="changeDriverStatus('${drv.id}', 'approved')" style="background:var(--color-success); border:none; padding:4px 8px; font-size:0.75rem;">อนุมัติ</button>
+776: <button class="btn btn-outline btn-sm" onclick="changeDriverStatus('${drv.id}', 'rejected')" style="color:var(--color-danger); border-color:rgba(239,68,68,0.2); padding:4px 8px; font-size:0.75rem;">ระงับ</button>
+780: <button class="btn btn-outline btn-sm" onclick="changeDriverStatus('${drv.id}', 'rejected')" style="color:var(--color-danger); border-color:rgba(239,68,68,0.2); padding:4px 8px; font-size:0.75rem;">ระงับสิทธิ์</button>
+784: <button class="btn btn-primary btn-sm" onclick="changeDriverStatus('${drv.id}', 'approved')" style="background:var(--color-success); border:none; padding:4px 8px; font-size:0.75rem;">อนุมัติใช้งาน</button>
+814: function changeDriverStatus(id, newStatus) {
+815: const drivers = DB.get("drivers", []);
+816: const target = drivers.find(d => d.id === id);
+819: DB.set("drivers", drivers);
+829: renderSuperDriversTable();
+836: const drivers = DB.get("drivers", []);
+837: const filtered = drivers.filter(d => d.id !== id);
+838: DB.set("drivers", filtered);
+839: renderSuperDriversTable();
+849: renderSuperDriversTable();
+
+=== Matches for 'maxWeight' ===
+
+=== Matches for 'weight' ===
+33: font-weight: bold;
+479: <td><span style="background:rgba(255,255,255,0.05); color:${typeColor}; padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:bold;">${u.typeName}</span></td>
+483: <td style="font-family:var(--font-heading); color:var(--color-warning); font-weight:bold;">${passDisplay}</td>
+605: <td><span style="font-weight:600; color:var(--color-secondary);">${whText}</span></td>
+789: `<span style="background:rgba(37, 99, 235, 0.1); color:var(--color-primary); padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:bold;">คนขับประจำ</span>` :
+790: `<span style="background:rgba(139, 92, 246, 0.1); color:var(--color-secondary); padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:bold;">ขนส่งนอก</span>`;
+800: <td><span style="font-weight:600; color:var(--color-secondary);">คลัง${drv.warehouse || 'สุขสวัสดิ์'}</span></td>
+
+=== Matches for 'capacity' ===
+
+=== Matches for 'assignedDriverId' ===

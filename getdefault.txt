@@ -1,0 +1,10 @@
+FOUND in app.js at char index: 2687
+lper to get default weight capacity based on driver type (regular vs 3pl) and vehicle type
+function getDriverDefaultMaxWeight(driverType, vehicleType) {
+    const is3pl = String(driverType).toLowerCase() === '3pl';
+    const type = String(vehicleType).toLowerCase();
+    
+    if (is3pl) {
+        if (type.includes("pickup") || type.includes("กระบะ") || type.includes("4ล้อ")) return 3500;
+        if
+NOT FOUND as function in admin.html

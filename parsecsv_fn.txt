@@ -1,0 +1,67 @@
+function parseCSVText(text) {
+    const lines = text.split('\n');
+    if (lines.length < 2) return [];
+
+    const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, '').replace(/^\ufeff/, ''));
+    const orders = [];
+
+    const getColumnVal = (rowValues, keyArray, index) => {
+        // First try header names
+        for (const key of keyArray) {
+            const idx = headers.findIndex(h => h.toLowerCase() === key.toLowerCase() || h === key);
+            if (idx !== -1 && rowValues[idx] !== undefined) {
+                return rowValues[idx].trim().replace(/"/g, '');
+            }
+        }
+        // Fallback to column index if valid
+        if (index !== undefined && index < rowValues.length && rowValues[index] !== undefined) {
+            return rowValues[index].trim().replace(/"/g, '');
+        }
+        return null;
+    };
+
+    for (let i = 1; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (!line) continue;
+        
+        // CSV split handling commas inside quotes
+        let rowValues = [];
+        let inQuotes = false;
+        let currentVal = '';
+        for (let charIdx = 0; charIdx < line.length; charIdx++) {
+            const c = line[charIdx];
+            if (c === '"') {
+                inQuotes = !inQuotes;
+            } else if (c === ',' && !inQuotes) {
+                rowValues.push(currentVal);
+                currentVal = '';
+            } else {
+                currentVal += c;
+            }
+        }
+        rowValues.push(currentVal);
+        rowValues = rowValues.map(v => v.trim());
+
+        const id = getColumnVal(rowValues, ["stop_id", "id", "หมายเลขจุดส่ง"], 0) || `ORD-${1000 + Math.floor(Math.random() * 9000)}`;
+        const latVal = getColumnVal(rowValues, ["lat", "latitude", "ละติจูด", "Latitude"], 1);
+        const lngVal = getColumnVal(rowValues, ["lng", "longitude", "ลองจิจูด", "Longitude"], 2);
+        const customerName = getColumnVal(rowValues, ["customerName", "ชื่อลูกค้า", "Customer", "ร้านค้า", "customer_id"], 3);
+        const weightVal = getColumnVal(rowValues, ["weight", "น้ำหนัก", "Weight", "น้ำหนักของสินค้าที่จะส่งที่จุดนี้"], 8);
+        const note = getColumnVal(rowValues, ["remarks", "หมายเหตุ", "Remarks", "Note", "note", "บันทึก"], 19) || "";
+
+        // Skip headers
+        if (id && (id.toLowerCase().includes("id") || id.includes("หมายเลข"))) continue;
+        if (customerName && (customerName.toLowerCase().includes("customer") || customerName.includes("ลูกค้า") || customerName.includes("รหัส"))) continue;
+
+        const lat = parseFloat(latVal);
+        const lng = parseFloat(lngVal);
+        const weight = parseFloat(weightVal) || 0;
+
+        if (customerName && !isNaN(lat) && !isNaN(lng)) {
+            let orderType = 'delivery';
+            if (note && (note.includes("รับกลับ") || note.includes("คืนสินค้า") || note.includes("รับคืน") || note.includes("เก็บคืน"))) {
+                orderType = 'return';
+            }
+
+            orders.push({
+          

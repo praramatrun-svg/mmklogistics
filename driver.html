@@ -1,0 +1,2185 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Mobile App - AI Logistics</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .driver-viewport {
+            border-top: none;
+            border-bottom: none;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .audit-alert-banner {
+            background: #fef2f2;
+            border: 1px solid #fca5a5;
+            color: #b91c1c;
+            padding: 8px 12px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            line-height: 1.4;
+            margin-bottom: 12px;
+        }
+
+        /* Enhancements for Older Drivers - Large text and simplified layout */
+        body.driver-page-container {
+            font-size: 1.15rem;
+        }
+        
+        .form-label {
+            font-size: 1.05rem !important;
+            font-weight: 700 !important;
+            color: #1e293b !important;
+            margin-bottom: 0.5rem !important;
+        }
+        
+        .form-input, .form-select {
+            width: 100% !important;
+            box-sizing: border-box !important;
+            padding: 1rem !important;
+            font-size: 1.15rem !important;
+            height: auto !important;
+            border-radius: 14px !important;
+            color: #0f172a !important;
+            min-width: 0 !important;
+        }
+        
+        .btn {
+            padding: 1.1rem 1.6rem !important;
+            font-size: 1.2rem !important;
+            font-weight: 700 !important;
+            border-radius: 18px !important;
+            height: auto !important;
+        }
+        
+        .driver-header-name {
+            font-size: 1.3rem !important;
+            font-weight: 700 !important;
+        }
+        
+        .driver-header-title {
+            font-size: 1rem !important;
+            font-weight: 600 !important;
+        }
+        
+        .driver-avatar-badge {
+            width: 50px !important;
+            height: 50px !important;
+            font-size: 1.3rem !important;
+        }
+        
+        .driver-mini-label {
+            font-size: 0.9rem !important;
+            font-weight: 600 !important;
+        }
+        
+        .driver-mini-value {
+            font-size: 1.3rem !important;
+            font-weight: 700 !important;
+        }
+        
+        /* Active Job Card */
+        .driver-job-tag {
+            font-size: 0.9rem !important;
+            font-weight: 800 !important;
+            color: var(--color-secondary) !important;
+        }
+        
+        .driver-customer-name {
+            font-size: 1.75rem !important;
+            font-weight: 800 !important;
+            line-height: 1.3 !important;
+            color: #0f172a !important;
+            margin-top: 0.3rem !important;
+        }
+        
+        .driver-address {
+            font-size: 1.15rem !important;
+            color: #475569 !important;
+            line-height: 1.5 !important;
+            margin-bottom: 1.5rem !important;
+        }
+        
+        .driver-meta-val {
+            font-size: 1.45rem !important;
+            font-weight: 800 !important;
+        }
+        
+        .driver-meta-lbl {
+            font-size: 0.85rem !important;
+            font-weight: 700 !important;
+        }
+        
+        /* Action buttons layout */
+        .driver-actions-row {
+            grid-template-columns: 1fr !important;
+            gap: 1rem !important;
+            margin-top: 1.5rem !important;
+        }
+        
+        .btn-driver-nav {
+            padding: 1.25rem !important;
+            font-size: 1.25rem !important;
+            border-radius: 18px !important;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.25) !important;
+            order: 2; /* Move navigation below complete button */
+        }
+        
+        .btn-driver-pod {
+            padding: 1.4rem !important;
+            font-size: 1.4rem !important;
+            border-radius: 18px !important;
+            background: linear-gradient(135deg, #10b981, #059669) !important;
+            color: white !important;
+            font-weight: 800 !important;
+            border: none !important;
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3) !important;
+            order: 1; /* Make POD the first top button */
+        }
+        
+        /* Route List Stop Rows */
+        .stop-num-circle {
+            width: 36px !important;
+            height: 36px !important;
+            font-size: 1.15rem !important;
+        }
+        
+        .stop-name {
+            font-size: 1.15rem !important;
+        }
+        
+        .stop-subtext {
+            font-size: 0.9rem !important;
+            line-height: 1.4 !important;
+        }
+        
+        /* Modal sheet styling updates */
+        .pod-sheet {
+            border-top-left-radius: 32px !important;
+            border-top-right-radius: 32px !important;
+            padding: 2.2rem 1.5rem 2.8rem 1.5rem !important;
+        }
+        
+        .pod-title {
+            font-size: 1.4rem !important;
+            font-weight: 800 !important;
+            color: #0f172a !important;
+        }
+        
+        .status-toggle-btn {
+            padding: 1.15rem !important;
+            font-size: 1.2rem !important;
+            font-weight: 800 !important;
+            border-radius: 16px !important;
+        }
+        
+        .status-toggle-btn.success.active {
+            background-color: #10b981 !important;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2) !important;
+        }
+        
+        .status-toggle-btn.fail.active {
+            background-color: #ef4444 !important;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2) !important;
+        }
+        
+        .photo-upload-zone {
+            padding: 1.6rem !important;
+            border-radius: 20px !important;
+            background: #f8fafc !important;
+            border: 2.5px dashed #cbd5e1 !important;
+        }
+        
+        .photo-upload-icon {
+            font-size: 2.4rem !important;
+            margin-bottom: 0.6rem !important;
+        }
+        
+        .payment-method-grid {
+            gap: 12px !important;
+        }
+        
+        .pay-btn {
+            padding: 1rem 0.5rem !important;
+            font-size: 1.05rem !important;
+            font-weight: 700 !important;
+            border-radius: 14px !important;
+        }
+        
+        .sig-canvas-container {
+            border-radius: 20px !important;
+        }
+        
+        .sig-canvas {
+            height: 150px !important;
+        }
+        
+        /* Multiple photo upload preview styles */
+        .pod-photos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+            margin-bottom: 15px;
+        }
+        .pod-photo-thumbnail {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+            background-color: rgba(255,255,255,0.05);
+        }
+        .pod-photo-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .pod-photo-remove {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+        }
+        .pod-upload-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .pod-action-btn {
+            flex: 1;
+            padding: 0.75rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            cursor: pointer;
+            border: 1px solid #cbd5e1;
+            background: #f8fafc;
+            color: #334155;
+            transition: all 0.2s;
+        }
+        .pod-action-btn:hover {
+            background: #f1f5f9;
+            border-color: var(--color-secondary);
+            color: var(--color-secondary);
+        }
+
+        /* --------------------------------------------------
+           DRIVER CONTRAST & VISIBILITY FIXES
+           -------------------------------------------------- */
+        /* Explicitly style outline buttons inside driver viewport */
+        .driver-viewport .btn-outline {
+            border: 1.5px solid #cbd5e1 !important;
+            color: #334155 !important;
+            background-color: #ffffff !important;
+        }
+        .driver-viewport .btn-outline:hover {
+            background-color: #f1f5f9 !important;
+            color: #0f172a !important;
+            border-color: #94a3b8 !important;
+        }
+
+        /* Ensure labels in POD modal sheet are dark grey and highly legible */
+        .pod-sheet label,
+        .pod-sheet .form-label {
+            color: #334155 !important;
+            font-weight: 700 !important;
+        }
+
+        /* Ensure form input and select elements in POD sheet have light theme styling */
+        .pod-sheet .form-select,
+        .pod-sheet .form-input {
+            background-color: #ffffff !important;
+            color: #0f172a !important;
+            border: 1.5px solid #cbd5e1 !important;
+        }
+
+        /* Guarantee dropdown options and optgroups are white-background with dark slate text */
+        .driver-viewport select option,
+        .driver-viewport .form-select option,
+        .pod-sheet select option,
+        .pod-sheet .form-select option {
+            background-color: #ffffff !important;
+            color: #334155 !important;
+        }
+
+        .driver-viewport select optgroup,
+        .driver-viewport .form-select optgroup {
+            background-color: #f1f5f9 !important;
+            color: #334155 !important;
+            font-weight: bold !important;
+        }
+
+        /* Specifically force Account Switcher styling */
+        .account-switcher-select {
+            background-color: #ffffff !important;
+            color: #0f172a !important;
+            border: 1.5px solid #cbd5e1 !important;
+            font-weight: 600 !important;
+        }
+
+        /* Force active POD toggle button texts to be white */
+        .status-toggle-btn.success.active {
+            color: #ffffff !important;
+        }
+        .status-toggle-btn.fail.active {
+            color: #ffffff !important;
+        }
+
+        /* Force mock capture buttons inside POD sheet */
+        .pod-action-btn {
+            border: 1.5px solid #cbd5e1 !important;
+            background: #ffffff !important;
+            color: #0f172a !important;
+        }
+        .pod-action-btn:hover {
+            background: #f1f5f9 !important;
+            border-color: var(--color-secondary) !important;
+            color: var(--color-secondary) !important;
+        }
+    </style>
+</head>
+<body class="driver-page-container">
+
+    <!-- Mobile Viewport Wrapper -->
+    <div class="driver-viewport">
+        
+        <!-- -------------------------------------------------------------
+             VIEW 1: SIGN IN / REGISTRATION
+        --------------------------------------------------------------- -->
+        <div id="driverAuthView" class="driver-auth-container">
+            <div style="text-align: center; margin-bottom: 1.5rem;">
+                <span style="font-size: 3rem;">🚚</span>
+                <h2 style="font-family: var(--font-heading); margin-top: 0.5rem; color: var(--driver-text-main);">ระบบงานคนขับรถ (Driver Portal)</h2>
+                <p style="color: var(--driver-text-muted); font-size: 0.9rem; margin-top: 0.3rem;">กรุณาเลือกประเภทคนขับรถเพื่อเริ่มงานวิ่ง</p>
+            </div>
+
+            <!-- Tab Toggles -->
+            <div class="driver-tab-group" style="display: flex; gap: 10px; margin-bottom: 1.5rem; background: #e2e8f0; padding: 6px; border-radius: 16px;">
+                <button type="button" id="tabRegularBtn" class="btn" style="flex: 1; padding: 0.7rem !important; font-size: 0.95rem !important; border-radius: 12px !important; background: var(--color-primary); color: white; border: none; cursor: pointer;" onclick="switchDriverTypeTab('regular')">
+                    คนขับประจำ (พนักงาน)
+                </button>
+                <button type="button" id="tab3plBtn" class="btn" style="flex: 1; padding: 0.7rem !important; font-size: 0.95rem !important; border-radius: 12px !important; background: transparent; color: var(--driver-text-muted); border: none; cursor: pointer;" onclick="switchDriverTypeTab('3pl')">
+                    ขนส่งนอก (3PL)
+                </button>
+            </div>
+
+            <div class="driver-auth-card">
+                <!-- 1. REGULAR DRIVER LOGIN FORM -->
+                <div id="regularDriverLoginContainer">
+                    <form onsubmit="handleRegularDriverLogin(event)">
+                        <div style="display:flex; flex-direction:column; gap:1rem;">
+                            <div class="form-group">
+                                <label class="form-label">ชื่อผู้ใช้งานคนขับ (Username)</label>
+                                <input type="text" id="loginDriverUser" class="form-input" placeholder="ระบุ username คนขับประจำ" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">รหัสผ่านระบบ (Password)</label>
+                                <input type="password" id="loginDriverPass" class="form-input" placeholder="ระบุ password" required>
+                            </div>
+                            <span id="driverLoginError" style="color: var(--color-danger); font-size: 0.85rem; text-align: center; display: none;"></span>
+                            <button type="submit" class="btn btn-primary" style="margin-top: 0.5rem; width: 100%; display: flex; justify-content: center; background: var(--color-primary); border: none; cursor: pointer;">
+                                🔑 เข้าสู่ระบบคนขับประจำ
+                            </button>
+                        </div>
+                    </form>
+                    <div style="margin-top:1.5rem; text-align:center; border-top:1px solid var(--driver-border); padding-top:1rem;">
+                        <a href="#" onclick="showRegularDriverRegister(event)" style="font-size: 0.9rem; color: var(--color-secondary); font-weight: bold; text-decoration: underline;">
+                            ลงทะเบียนสมัครคนขับประจำใหม่ที่นี่
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 2. REGULAR DRIVER REGISTER FORM -->
+                <div id="regularDriverRegisterContainer" class="hidden">
+                    <form onsubmit="handleRegularDriverRegister(event)">
+                        <div style="display:flex; flex-direction:column; gap:0.9rem;">
+                            <div class="form-group">
+                                <label class="form-label">กำหนดชื่อผู้ใช้งาน (Username)</label>
+                                <input type="text" id="regDriverUser" class="form-input" placeholder="เช่น somchai_driver" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">กำหนดรหัสผ่าน (Password)</label>
+                                <input type="password" id="regDriverPass" class="form-input" placeholder="ขั้นต่ำ 4 ตัวอักษร" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">ชื่อ-นามสกุล คนขับประจำ</label>
+                                <input type="text" id="regDriverName" class="form-input" placeholder="เช่น นายสมชาย ยอดดี" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">เบอร์โทรศัพท์ติดต่อ</label>
+                                <input type="tel" id="regDriverPhone" class="form-input" placeholder="เช่น 081-xxx-xxxx" required>
+                            </div>
+                            <div style="display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap:10px;">
+                                <div class="form-group">
+                                    <label class="form-label">เลขทะเบียนรถ</label>
+                                    <input type="text" id="regDriverPlate" class="form-input" placeholder="เช่น 1กข-9988" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">จังหวัดทะเบียน</label>
+                                    <input type="text" id="regDriverPlateProvince" class="form-input" placeholder="เช่น กรุงเทพฯ" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">คลังสินค้าสังกัดหลัก</label>
+                                <select id="regDriverWarehouse" class="form-select" required>
+                                    <option value="สุขสวัสดิ์">สุขสวัสดิ์ (Suksawat)</option>
+                                    <option value="พัทยา">พัทยา (Pattaya)</option>
+                                    <option value="โคราช">โคราช (Korat)</option>
+                                    <option value="ปราจีนบุรี">ปราจีนบุรี (Prachinburi)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">ประเภทรถที่ใช้จัดส่ง</label>
+                                <select id="regDriverVehicle" class="form-select" required>
+                                    <option value="pickup">รถกระบะ 4 ล้อตู้ทึบ (Pickup)</option>
+                                    <option value="truck">รถบรรทุก 6 ล้อใหญ่ (Truck)</option>
+                                    <option value="truck_12">รถบรรทุก 12 ล้อ (12-Wheeler)</option>
+                                    
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="margin-top: 0.5rem; width: 100%; display: flex; justify-content: center; background: var(--color-success); border: none; cursor: pointer;">
+                                📝 ส่งลงทะเบียนเปิดบัญชีประจำ
+                            </button>
+                        </div>
+                    </form>
+                    <div style="margin-top:1.5rem; text-align:center; border-top:1px solid var(--driver-border); padding-top:1rem;">
+                        <a href="#" onclick="showRegularDriverLogin(event)" style="font-size: 0.9rem; color: var(--color-primary); font-weight: bold; text-decoration: underline;">
+                            มีบัญชีคนขับประจำแล้ว? เข้าสู่ระบบที่นี่
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 3. EXTERNAL 3PL DRIVER REGISTER FORM -->
+                <div id="externalDriverRegisterContainer" class="hidden">
+                    <form onsubmit="handleDriverRegister(event)">
+                        <div style="display:flex; flex-direction:column; gap:0.9rem;">
+                            <div class="form-group">
+                                <label class="form-label">ชื่อ-นามสกุล คนขับ (ขนส่งนอก)</label>
+                                <input type="text" id="regName" class="form-input" placeholder="เช่น นายประหยัด สมใจ" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">เบอร์โทรศัพท์ติดต่อ</label>
+                                <input type="tel" id="regPhone" class="form-input" placeholder="เช่น 089-xxx-xxxx" required>
+                            </div>
+                            <div style="display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap:10px;">
+                                <div class="form-group">
+                                    <label class="form-label">เลขทะเบียนรถ</label>
+                                    <input type="text" id="regPlate" class="form-input" placeholder="เช่น 1กข-9988" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">จังหวัดทะเบียน</label>
+                                    <input type="text" id="regPlateProvince" class="form-input" placeholder="เช่น ชลบุรี" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">คลังสินค้าที่รับงาน</label>
+                                <select id="regWarehouse" class="form-select" required>
+                                    <option value="สุขสวัสดิ์">สุขสวัสดิ์ (Suksawat)</option>
+                                    <option value="พัทยา">พัทยา (Pattaya)</option>
+                                    <option value="โคราช">โคราช (Korat)</option>
+                                    <option value="ปราจีนบุรี">ปราจีนบุรี (Prachinburi)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">ประเภทรถที่ใช้จัดส่ง</label>
+                                <select id="regVehicle" class="form-select" required>
+                                    <option value="pickup">รถกระบะ 4 ล้อตู้ทึบ (Pickup)</option>
+                                    <option value="truck">รถบรรทุก 6 ล้อใหญ่ (Truck)</option>
+                                    <option value="truck_12">รถบรรทุก 12 ล้อ (12-Wheeler)</option>
+                                    
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="margin-top: 0.5rem; width: 100%; display: flex; justify-content: center; background: var(--color-secondary); border: none; cursor: pointer;">
+                                📝 ลงทะเบียนส่งขออนุมัติงานวิ่ง (3PL)
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Quick Test Switch Account -->
+                <div style="margin-top:1.5rem; text-align:center; border-top:1px solid var(--driver-border); padding-top:1rem;">
+                    <p style="font-size:0.8rem; color:var(--driver-text-muted); font-weight:600; margin-bottom:0.5rem;">🔄 สลับไปบัญชีคนขับที่มีในระบบ:</p>
+                    <select id="existingDriverSelect" class="form-select account-switcher-select" style="margin-top:0.5rem; width:100%; font-size:0.85rem;" onchange="loginAsExistingDriver()">
+                        <!-- Injected by JS with optgroup -->
+                    </select>
+                    <p style="font-size:0.72rem; color:var(--driver-text-muted); margin-top:0.4rem;">⚠️ ต้องยืนยัน OTP จากเบอร์ของคุณก่อนสลับบัญชี</p>
+                </div>
+                
+                <!-- API Key Config Button -->
+                <div style="margin-top:1rem; text-align:center;">
+                    <a href="#" onclick="promptGoogleMapsApiKey(event)" style="font-size: 0.8rem; color: var(--driver-text-muted); text-decoration: underline;">
+                        🔑 ตั้งค่า Google Maps API Key
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- -------------------------------------------------------------
+             VIEW 2: WAITING FOR APPROVAL SCREEN
+        --------------------------------------------------------------- -->
+        <div id="driverWaitingView" class="waiting-approval-view hidden">
+            <div class="waiting-icon">⏳</div>
+            <h3 style="color: var(--driver-text-main); font-family: var(--font-heading); margin-bottom: 0.5rem;">รอการอนุมัติสิทธิ์</h3>
+            <p style="color: var(--driver-text-muted); font-size: 0.9rem; line-height: 1.6; max-width: 300px; margin-bottom: 1.5rem;">
+                คุณ <span id="waitName" style="color: var(--driver-text-main); font-weight: bold;"></span> ขอบคุณที่ร่วมจัดส่ง! ระบบได้รับข้อมูลของท่านแล้ว กรุณารอเจ้าหน้าที่แอดมินหลังบ้าน (Admin HQ) ประจำคลังกดยอมรับอนุมัติเข้าใช้งาน
+            </p>
+            <div style="background:#fff7ed; border:1px solid #ffedd5; padding:0.8rem 1.2rem; border-radius:12px; font-size:0.8rem; color:#c2410c;">
+                <strong>คลัง:</strong> <span id="waitWarehouse"></span> | <strong>ทะเบียน:</strong> <span id="waitPlate"></span> (<span id="waitProvince"></span>)
+            </div>
+            <button class="btn btn-outline" style="margin-top: 2rem;" onclick="checkApprovalStatus()">
+                🔄 ดึงข้อมูลพิกัดสถานะคนขับอีกครั้ง
+            </button>
+            <p style="font-size:0.75rem; color:var(--driver-text-muted); margin-top:2rem;">
+                (คุณสามารถสลับไปหน้าจอ <strong>Admin HQ -> เมนูอนุมัติ</strong> เพื่อกดยอมรับคนขับคนนี้ได้ทันที)
+            </p>
+        </div>
+
+        <!-- -------------------------------------------------------------
+             VIEW 3: DRIVER MAIN ACTION PANEL
+        --------------------------------------------------------------- -->
+        <div id="driverMainView" class="hidden">
+            <!-- Sticky Header -->
+            <header class="driver-header">
+                <div>
+                    <div class="driver-header-title" id="driverHeaderWarehouse">คลังจัดส่ง</div>
+                    <div class="driver-header-name" id="driverHeaderName">พนักงานขับรถ</div>
+                </div>
+                <div class="driver-avatar-badge" id="driverAvatarBadge">DR</div>
+            </header>
+
+            <!-- Contents -->
+            <div class="driver-content">
+                
+                <!-- Dual Stats matching mockup -->
+                <div class="driver-mini-stats">
+                    <div class="driver-mini-card">
+                        <div class="driver-mini-label">งานที่เสร็จแล้ว</div>
+                        <div class="driver-mini-value" id="driverCompletedVal">0 / 0</div>
+                    </div>
+                    <div class="driver-mini-card">
+                        <div class="driver-mini-label">ตำแหน่งรถปัจจุบัน</div>
+                        <div class="driver-mini-value" id="driverCoordsVal" style="font-size: 0.95rem; line-height:1.6; font-family:var(--font-heading);">
+                            13.725 / 100.530
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive Route Map Card -->
+                <div class="driver-map-card">
+                    <div class="driver-map-header">
+                        <h4 class="driver-map-title">การจัดเส้นทาง (แบบน้ำหนักเบา)</h4>
+                        <span class="driver-api-badge">พิกัด GPS ทั่ว กทม.</span>
+                    </div>
+
+                    <div class="driver-map-canvas-container" style="background:#f8fafc; position:relative; overflow:hidden; height:360px;">
+                        <div id="googleMap" style="width:100%; height:100%; border-radius: 16px; overflow: hidden; position: relative;"></div>
+                    </div>
+
+                    <div class="driver-map-legend">
+                        <div class="driver-legend-item">
+                            <span class="legend-dot" style="background: var(--color-success)"></span> ส่งสำเร็จ
+                        </div>
+                        <div class="driver-legend-item">
+                            <span class="legend-dot" style="background: var(--color-primary)"></span> จุดปัจจุบัน
+                        </div>
+                        <div class="driver-legend-item">
+                            <span class="legend-dot" style="background: var(--color-warning)"></span> รอจัดส่ง
+                        </div>
+                        <div class="driver-legend-item">
+                            <span class="legend-dot" style="background: var(--color-danger)"></span> ส่งไม่สำเร็จ
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Current Active Job details -->
+                <div class="driver-job-card" id="driverActiveJobCard">
+                    <!-- Injected dynamically by JS -->
+                </div>
+
+                <!-- Image 3: Optimized Route List Component -->
+                <div class="driver-route-list-card">
+                    <div class="route-list-header">
+                        <h3 class="driver-map-title">ลำดับการเดินทางคิวขนส่งที่จัดไว้</h3>
+                        <span class="route-list-badge">เรียงด้วย AI Heuristic</span>
+                    </div>
+                    <div id="queueRequestStatus" style="display: none; background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.25); border-radius: 8px; padding: 0.6rem 0.8rem; margin: 0.5rem 1rem 0.5rem; color: var(--color-warning); font-size: 0.75rem; font-weight: 600; text-align: center;">
+                        ⏳ ส่งคำขอปรับลำดับไปยังแอดมินแล้ว รอการตรวจสอบ...
+                    </div>
+                    <div class="route-list-stops" id="driverRouteListStops">
+                        <!-- Injected dynamically by JS to match Image 3 layout -->
+                    </div>
+                </div>
+
+                <button class="btn btn-outline" style="margin-top: 1rem; width: 100%;" onclick="logoutDriver()">
+                    🚪 สลับคนขับ / ออกจากระบบ
+                </button>
+            </div>
+        </div>
+
+        <!-- -------------------------------------------------------------
+             VIEW 4: BOTTOM POD SHEET / MODAL
+        --------------------------------------------------------------- -->
+        <div class="pod-overlay" id="podSheetOverlay">
+            <div class="pod-sheet">
+                <div class="pod-title">
+                    <span>ส่งรายงานหลักฐานงาน (POD)</span>
+                    <button onclick="hidePodSheet()" style="background:none; border:none; font-size:1.5rem; cursor:pointer; color:var(--driver-text-muted);">✕</button>
+                </div>
+
+                <!-- Success / Failure Toggle -->
+                <div class="pod-status-toggle">
+                    <button class="status-toggle-btn success active" id="toggleSuccessBtn" onclick="setPodStatus(true)">
+                        ✓ จัดส่งสำเร็จ
+                    </button>
+                    <button class="status-toggle-btn fail" id="toggleFailBtn" onclick="setPodStatus(false)">
+                        ✕ จัดส่งไม่สำเร็จ
+                    </button>
+                </div>
+
+                <!-- PHOTO PROOF - MANDATORY IN BOTH SUCCESS & FAIL (Phase 3 Enforced) -->
+                <div class="form-group" style="margin-bottom:1.25rem;">
+                    <label class="form-label" style="color: var(--driver-text-muted); font-weight: bold;" id="photoUploadLabelText">
+                        1. อัปโหลดรูปภาพหลักฐานการส่งมอบสินค้า (บังคับอย่างน้อย 1 รูป)
+                    </label>
+                    
+                    <!-- Thumbnail preview grid -->
+                    <div id="podPhotosGrid" class="pod-photos-grid">
+                        <!-- Injected by JS -->
+                    </div>
+
+                    <!-- Upload and Simulation Actions -->
+                    <div class="pod-upload-actions">
+                        <button class="pod-action-btn" onclick="triggerMockPhotoUpload('pod')">
+                            📸 จำลองถ่ายภาพ
+                        </button>
+                        <button class="pod-action-btn" onclick="document.getElementById('podAlbumInput').click()">
+                            📁 เลือกจากอัลบั้ม
+                        </button>
+                        <input type="file" id="podAlbumInput" style="display: none;" accept="image/*" multiple onchange="handlePodAlbumUpload(this)">
+                    </div>
+                </div>
+
+                <!-- FAIL FORM FIELDS -->
+                <div id="podFailFields" class="conditional-field">
+                    <div class="form-group" style="margin-bottom: 1.25rem;">
+                        <label class="form-label" style="color: var(--driver-text-muted);">ระบุสาเหตุการจัดส่งไม่สำเร็จ</label>
+                        <select id="podFailReasonSelect" class="form-select">
+                            <option value="ติดต่อลูกค้าไม่ได้">📞 ลูกค้าไม่รับสาย/ไม่สามารถติดต่อได้</option>
+                            <option value="ที่อยู่ไม่ถูกต้อง">📍 ที่อยู่จัดส่งไม่ถูกต้อง/หาบ้านไม่เจอ</option>
+                            <option value="ลูกค้าปฏิเสธการรับสินค้า">⛔ ลูกค้าปฏิเสธรับเนื่องจากไม่ได้สั่ง/สั่งซ้ำ</option>
+                            <option value="สินค้าชำรุดเสียหาย">📦 ตัวสินค้าชำรุดเสียหายก่อนส่งมอบ</option>
+                            <option value="อื่นๆ">❓ อื่นๆ (ระบุเพิ่มในหมายเหตุ)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- SUCCESS FORM FIELDS -->
+                <div id="podSuccessFields" class="conditional-field active">
+                    <!-- Payment Details Card Section -->
+                    <div class="payment-group">
+                        <label class="form-label" style="color: var(--driver-text-muted); font-weight:700;">2. ชำระค่าบริการปลายทาง (COD)</label>
+                        <div style="font-size:0.85rem; margin-top:0.4rem; color: #b45309; font-weight:bold;">
+                            ยอดเงินที่ต้องจัดเก็บ: ฿<span id="podSheetCodVal">0</span>
+                        </div>
+                        
+                        <div class="payment-method-grid">
+                            <button class="pay-btn active" id="payBtn-cash" onclick="selectPaymentMethod('cash')">💶 เงินสด</button>
+                            <button class="pay-btn" id="payBtn-transfer" onclick="selectPaymentMethod('transfer')">📲 โอนเงิน</button>
+                            <button class="pay-btn" id="payBtn-cheque" onclick="selectPaymentMethod('cheque')">✍️ เช็ค</button>
+                            <button class="pay-btn" id="payBtn-credit" onclick="selectPaymentMethod('credit')">💳 เครดิต</button>
+                        </div>
+
+                        <!-- Cash / Transfer / Cheque Photo upload -->
+                        <div id="payPhotoSection" class="conditional-field active" style="margin-top:1rem;">
+                            <label class="form-label" style="color: var(--driver-text-muted); font-size:0.8rem;">แนบรูปถ่ายหลักฐานการเงิน (สลิปโอน/เงินสด/เช็ค)</label>
+                            <div class="photo-upload-zone" onclick="triggerMockPhotoUpload('payment')" style="padding:1rem; margin-top:0.4rem;">
+                                <div class="photo-upload-icon" style="font-size:1.5rem;">📸</div>
+                                <div style="font-size:0.75rem;" id="paymentPhotoLabel">คลิกถ่ายรูปสลิป/เงินสด/เช็ค เพื่อแนบเป็นหลักฐาน</div>
+                                <img id="paymentPhotoPreview" class="uploaded-preview-img" alt="Receipt Preview">
+                            </div>
+                        </div>
+
+                        <!-- Unpaid Reason fields -->
+                        <div id="unpaidReasonSection" class="conditional-field" style="margin-top:1rem;">
+                            <label class="form-label" style="color: var(--driver-text-muted); font-size:0.8rem;">กรณีค้างชำระหน้างาน โปรดระบุสาเหตุ</label>
+                            <select id="unpaidReasonSelect" class="form-select" style="font-size:0.8rem; padding:0.6rem;">
+                                <option value="ชำระเงินเรียบร้อยแล้วกับพนักงานฝ่ายขาย (Sales)">💸 จ่ายกับเซลล์แล้ว</option>
+                                <option value="ลูกค้าไม่สะดวกชำระ ขอติดเงินจ่ายทีหลัง">⏳ เดียวจ่ายทีหลังตอนนี้ไม่สะดวก</option>
+                                <option value="อื่นๆ (ระบุเพิ่มเติม)">📝 อื่นๆ</option>
+                            </select>
+                        </div>
+                        
+                        <div style="margin-top:0.8rem; display:flex; align-items:center; gap:8px;">
+                            <input type="checkbox" id="unpaidCheckbox" onchange="toggleUnpaidState(this)">
+                            <label for="unpaidCheckbox" style="font-size:0.75rem; color: var(--driver-text-muted); cursor:pointer;">
+                                หน้างานยังไม่ชำระเงิน (Unpaid/ค้างจ่าย)
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Digital Signature Canvas Pad -->
+                    <div class="sig-canvas-container">
+                        <div class="sig-canvas-header">
+                            <span>ลงลายมือชื่อเซ็นรับมอบสินค้า</span>
+                            <span class="sig-canvas-clear" onclick="clearSignatureCanvas()">ล้าง ✕</span>
+                        </div>
+                        <canvas id="signatureCanvas" class="sig-canvas"></canvas>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button class="btn btn-primary" style="width:100%; padding:1rem; display:flex; justify-content:center; background:#0f172a;" onclick="submitPOD()">
+                    🚀 ส่งรายงานและเริ่มคิวถัดไป
+                </button>
+            </div>
+        </div>
+        
+    </div>
+
+    <!-- Registration Success Modal Overlay -->
+    <div id="driverSuccessModal" class="success-overlay">
+        <div class="success-modal">
+            <div class="success-checkmark">✓</div>
+            <h3 style="color: var(--driver-text-main); font-family: var(--font-heading); margin-bottom: 0.5rem;">ส่งข้อมูลสำเร็จ</h3>
+            <p style="color: var(--driver-text-muted); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.5rem;">
+                ส่งข้อมูลสำเร็จ รอการอนุมัติจากบริษัท
+            </p>
+            <button class="btn btn-primary" style="width: 100%; justify-content: center; background: var(--color-success);" onclick="closeSuccessModalAndGoToWait()">
+                ตกลง
+            </button>
+        </div>
+    </div>
+
+    <!-- OTP Account Switch Modal -->
+    <div class="otp-overlay" id="otpSwitchOverlay">
+        <div class="otp-modal">
+            <div class="otp-icon">📱</div>
+            <div class="otp-title">ยืนยันการสลับบัญชี</div>
+            <div class="otp-subtitle">เพื่อความปลอดภัย ระบบส่ง OTP ไปยังเบอร์โทรของคุณ</div>
+            <div class="otp-phone-badge" id="otpPhoneBadge">xxx-xxx-xx89</div>
+            <div class="otp-input-wrapper" id="otpInputWrapper">
+                <input class="otp-digit" id="otpD1" type="number" min="0" max="9" maxlength="1" oninput="otpAutoTab(this, 'otpD2')" onkeydown="otpBackTab(event, this, null)">
+                <input class="otp-digit" id="otpD2" type="number" min="0" max="9" maxlength="1" oninput="otpAutoTab(this, 'otpD3')" onkeydown="otpBackTab(event, this, 'otpD1')">
+                <input class="otp-digit" id="otpD3" type="number" min="0" max="9" maxlength="1" oninput="otpAutoTab(this, 'otpD4')" onkeydown="otpBackTab(event, this, 'otpD2')">
+                <input class="otp-digit" id="otpD4" type="number" min="0" max="9" maxlength="1" oninput="otpAutoTab(this, null)" onkeydown="otpBackTab(event, this, 'otpD3')">
+            </div>
+            <div class="otp-error-msg" id="otpErrorMsg"></div>
+            <div class="otp-hint" id="otpHintText">💡 รหัส OTP คือ 4 ตัวสุดท้ายของเบอร์โทรคุณ (เพื่อการทดสอบ)</div>
+            <div class="otp-actions">
+                <button class="btn btn-outline" style="border-color:#cbd5e1; color:var(--driver-text-muted);" onclick="closeOtpModal()">ยกเลิก</button>
+                <button class="btn btn-primary" onclick="confirmOtpSwitch()">✅ ยืนยัน OTP</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Real-time Toast messages -->
+    <div class="toast-msg" id="toastBox">
+        <span class="toast-dot"></span>
+        <span id="toastText">การอนุมัติสำเร็จ!</span>
+    </div>
+
+    <!-- Include Logic Script -->
+    <script src="app.js"></script>
+    <script>
+        let currentDriverId = null;
+        let activeJobId = null;
+        let isNavigating = false;
+        
+        let podSuccessStatus = true;
+        let selectedPayMethod = 'cash';
+        
+        let podPhotoData = null;
+        let paymentPhotoData = null;
+        let podPhotos = [];
+
+        let canvas, ctx;
+        let drawing = false;
+
+        // ---------------------------------------------------------
+        // Core Lifecycle & Authentication
+        // ---------------------------------------------------------
+        window.addEventListener('DOMContentLoaded', () => {
+            initSignatureCanvas();
+            loadDriverApp();
+            
+            window.addEventListener('storage', () => {
+                checkApprovalStateChange();
+            });
+            window.addEventListener('storage-update', () => {
+                checkApprovalStateChange();
+            });
+        });
+
+        function loadDriverApp() {
+            const savedDriverId = localStorage.getItem('current_driver_id');
+            const drivers = DB.get("drivers");
+            
+            // Build account switcher with optgroup separation
+            const selectEl = document.getElementById('existingDriverSelect');
+            const regularDrivers = drivers.filter(d => d.driverType === 'regular' || !d.driverType);
+            const externalDrivers = drivers.filter(d => d.driverType === '3pl');
+            
+            let selectHtml = '<option value="">-- เลือกบัญชีที่ต้องการสลับ --</option>';
+            
+            if (regularDrivers.length > 0) {
+                selectHtml += '<optgroup label="👤 คนขับประจำ (พนักงาน)">';
+                regularDrivers.forEach(d => {
+                    let statText = d.status === 'approved' ? '✓' : (d.status === 'rejected' ? '✕' : '⏳');
+                    const isCurrent = d.id === savedDriverId ? ' [ปัจจุบัน]' : '';
+                    selectHtml += `<option value="${d.id}">${statText} ${d.name.split(' ')[0]} (${d.plate})${isCurrent}</option>`;
+                });
+                selectHtml += '</optgroup>';
+            }
+            
+            if (externalDrivers.length > 0) {
+                selectHtml += '<optgroup label="🚛 ขนส่งนอก (3PL)">';
+                externalDrivers.forEach(d => {
+                    let statText = d.status === 'approved' ? '✓' : (d.status === 'rejected' ? '✕' : '⏳');
+                    const isCurrent = d.id === savedDriverId ? ' [ปัจจุบัน]' : '';
+                    selectHtml += `<option value="${d.id}">${statText} ${d.name.split(' ')[0]} (${d.plate})${isCurrent}</option>`;
+                });
+                selectHtml += '</optgroup>';
+            }
+            
+            selectEl.innerHTML = selectHtml;
+
+            if (savedDriverId) {
+                const currentDrv = drivers.find(d => d.id === savedDriverId);
+                if (currentDrv) {
+                    currentDriverId = savedDriverId;
+                    
+                    if (currentDrv.status === 'approved') {
+                        driverMapFirstFit = true;
+                        showView('driverMainView');
+                        renderDriverDashboard();
+                    } else if (currentDrv.status === 'pending') {
+                        document.getElementById('waitName').textContent = currentDrv.name;
+                        document.getElementById('waitPlate').textContent = currentDrv.plate;
+                        document.getElementById('waitProvince').textContent = currentDrv.plateProvince || 'กรุงเทพฯ';
+                        document.getElementById('waitWarehouse').textContent = currentDrv.warehouse || 'สุขสวัสดิ์';
+                        showView('driverWaitingView');
+                    } else {
+                        localStorage.removeItem('current_driver_id');
+                        showView('driverAuthView');
+                        alert("บัญชีถูกระงับหรือไม่อนุมัติจาก HQ");
+                    }
+                    return;
+                }
+            }
+            
+            showView('driverAuthView');
+        }
+
+        function showView(viewId) {
+            document.getElementById('driverAuthView').classList.add('hidden');
+            document.getElementById('driverWaitingView').classList.add('hidden');
+            document.getElementById('driverMainView').classList.add('hidden');
+            document.getElementById(viewId).classList.remove('hidden');
+        }
+
+        let activeDriverType = 'regular'; // 'regular' or '3pl'
+
+        function switchDriverTypeTab(type) {
+            activeDriverType = type;
+            const regBtn = document.getElementById('tabRegularBtn');
+            const tplBtn = document.getElementById('tab3plBtn');
+            const regularLogin = document.getElementById('regularDriverLoginContainer');
+            const regularRegister = document.getElementById('regularDriverRegisterContainer');
+            const externalRegister = document.getElementById('externalDriverRegisterContainer');
+
+            if (type === 'regular') {
+                regBtn.style.background = 'var(--color-primary)';
+                regBtn.style.color = 'white';
+                tplBtn.style.background = 'transparent';
+                tplBtn.style.color = 'var(--driver-text-muted)';
+                
+                regularLogin.classList.remove('hidden');
+                regularRegister.classList.add('hidden');
+                externalRegister.classList.add('hidden');
+            } else {
+                tplBtn.style.background = 'var(--color-primary)';
+                tplBtn.style.color = 'white';
+                regBtn.style.background = 'transparent';
+                regBtn.style.color = 'var(--driver-text-muted)';
+                
+                externalRegister.classList.remove('hidden');
+                regularLogin.classList.add('hidden');
+                regularRegister.classList.add('hidden');
+            }
+        }
+
+        function showRegularDriverRegister(e) {
+            if (e) e.preventDefault();
+            document.getElementById('regularDriverLoginContainer').classList.add('hidden');
+            document.getElementById('regularDriverRegisterContainer').classList.remove('hidden');
+        }
+
+        function showRegularDriverLogin(e) {
+            if (e) e.preventDefault();
+            document.getElementById('regularDriverRegisterContainer').classList.add('hidden');
+            document.getElementById('regularDriverLoginContainer').classList.remove('hidden');
+        }
+
+        function handleRegularDriverLogin(event) {
+            event.preventDefault();
+            const user = document.getElementById('loginDriverUser').value.trim();
+            const pass = document.getElementById('loginDriverPass').value;
+            const errorField = document.getElementById('driverLoginError');
+
+            const drivers = DB.get("drivers", []);
+            const target = drivers.find(d => d.driverType === 'regular' && d.username === user && d.password === pass);
+
+            if (!target) {
+                errorField.textContent = '❌ ชื่อผู้ใช้งานหรือรหัสผ่านคนขับประจำไม่ถูกต้อง!';
+                errorField.style.display = 'block';
+                return;
+            }
+
+            errorField.style.display = 'none';
+
+            localStorage.setItem('current_driver_id', target.id);
+            loadDriverApp();
+        }
+
+        function handleRegularDriverRegister(event) {
+            event.preventDefault();
+            const user = document.getElementById('regDriverUser').value.trim();
+            const pass = document.getElementById('regDriverPass').value;
+            const name = document.getElementById('regDriverName').value.trim();
+            const phone = document.getElementById('regDriverPhone').value.trim();
+            const plate = document.getElementById('regDriverPlate').value.trim();
+            const province = document.getElementById('regDriverPlateProvince').value.trim();
+            const warehouse = document.getElementById('regDriverWarehouse').value;
+            const vehicleType = document.getElementById('regDriverVehicle').value;
+
+            if (pass.length < 4) {
+                alert("รหัสผ่านต้องมีอย่างน้อย 4 ตัวอักษร!");
+                return;
+            }
+
+            const drivers = DB.get("drivers", []);
+            const exists = drivers.some(d => d.username && d.username.toLowerCase() === user.toLowerCase());
+
+            if (exists) {
+                alert("ขออภัย! ชื่อผู้ใช้งานคนขับนี้มีอยู่แล้วในระบบ");
+                return;
+            }
+
+            const driverId = `drv-${Date.now()}`;
+            const newDriverObj = {
+                id: driverId,
+                name: name,
+                phone: phone,
+                plate: plate,
+                plateProvince: province,
+                warehouse: warehouse,
+                vehicleType: vehicleType,
+                driverType: 'regular',
+                username: user,
+                password: pass,
+                status: 'pending'
+            };
+
+            drivers.push(newDriverObj);
+            DB.set("drivers", drivers);
+
+            localStorage.setItem('current_driver_id', driverId);
+
+            // Show Success Modal
+            document.getElementById('driverSuccessModal').classList.add('active');
+        }
+
+        function handleDriverRegister(event) {
+            event.preventDefault();
+            const name = document.getElementById('regName').value;
+            const phone = document.getElementById('regPhone').value;
+            const plate = document.getElementById('regPlate').value;
+            const province = document.getElementById('regPlateProvince').value;
+            const warehouse = document.getElementById('regWarehouse').value;
+            const vehicleType = document.getElementById('regVehicle').value;
+            
+            const driverId = `drv-${Date.now()}`;
+            const newDriverObj = {
+                id: driverId,
+                name: name,
+                phone: phone,
+                plate: plate,
+                plateProvince: province,
+                warehouse: warehouse,
+                vehicleType: vehicleType,
+                driverType: '3pl',
+                status: 'pending'
+            };
+
+            const drivers = DB.get("drivers");
+            drivers.push(newDriverObj);
+            DB.set("drivers", drivers);
+
+            localStorage.setItem('current_driver_id', driverId);
+            
+            // Show Success Modal instead of loading app immediately
+            document.getElementById('driverSuccessModal').classList.add('active');
+        }
+
+        function closeSuccessModalAndGoToWait() {
+            document.getElementById('driverSuccessModal').classList.remove('active');
+            loadDriverApp();
+        }
+
+        let pendingOtpTargetId = null;
+        let expectedOtpCode = null;
+
+        function loginAsExistingDriver() {
+            const selectVal = document.getElementById('existingDriverSelect').value;
+            if (!selectVal) return;
+            
+            const currentId = localStorage.getItem('current_driver_id');
+            
+            // If switching to the same account, just reload
+            if (selectVal === currentId) {
+                document.getElementById('existingDriverSelect').value = '';
+                loadDriverApp();
+                return;
+            }
+            
+            // Require OTP verification before switching to a different account
+            openOtpModal(selectVal);
+        }
+
+        function openOtpModal(targetDriverId) {
+            pendingOtpTargetId = targetDriverId;
+            
+            const drivers = DB.get("drivers");
+            const currentId = localStorage.getItem('current_driver_id');
+            const currentDrv = drivers.find(d => d.id === currentId);
+            
+            // Determine the phone to show (current driver's phone or generic)
+            let phoneDisplay = 'xxx-xxx-xxxx';
+            let otpCode = '1234'; // default fallback
+            
+            if (currentDrv && currentDrv.phone) {
+                const phone = currentDrv.phone.replace(/\D/g, ''); // digits only
+                const last4 = phone.slice(-4);
+                phoneDisplay = currentDrv.phone.replace(/.(?=.{2})/g, (c, i) => i > 2 ? 'x' : c).slice(0, -2) + currentDrv.phone.slice(-2);
+                otpCode = last4;
+            } else if (!currentId) {
+                // No current driver – use target driver's phone (first login scenario)
+                const targetDrv = drivers.find(d => d.id === targetDriverId);
+                if (targetDrv && targetDrv.phone) {
+                    const phone = targetDrv.phone.replace(/\D/g, '');
+                    otpCode = phone.slice(-4);
+                    phoneDisplay = targetDrv.phone;
+                }
+            }
+            
+            expectedOtpCode = otpCode;
+            
+            // Update modal UI
+            document.getElementById('otpPhoneBadge').textContent = phoneDisplay;
+            document.getElementById('otpHintText').textContent = `💡 รหัส OTP = 4 ตัวสุดท้ายของเบอร์โทรคุณ (ทดสอบ: ${otpCode})`;
+            document.getElementById('otpErrorMsg').textContent = '';
+            
+            // Clear inputs
+            ['otpD1', 'otpD2', 'otpD3', 'otpD4'].forEach(id => {
+                const el = document.getElementById(id);
+                el.value = '';
+                el.classList.remove('error');
+            });
+            
+            document.getElementById('otpSwitchOverlay').classList.add('active');
+            setTimeout(() => document.getElementById('otpD1').focus(), 300);
+        }
+
+        function closeOtpModal() {
+            document.getElementById('otpSwitchOverlay').classList.remove('active');
+            document.getElementById('existingDriverSelect').value = '';
+            pendingOtpTargetId = null;
+            expectedOtpCode = null;
+        }
+
+        function confirmOtpSwitch() {
+            const d1 = document.getElementById('otpD1').value;
+            const d2 = document.getElementById('otpD2').value;
+            const d3 = document.getElementById('otpD3').value;
+            const d4 = document.getElementById('otpD4').value;
+            
+            const enteredCode = d1 + d2 + d3 + d4;
+            const errorMsg = document.getElementById('otpErrorMsg');
+            
+            if (enteredCode.length < 4) {
+                errorMsg.textContent = 'กรุณากรอก OTP ให้ครบ 4 หลัก';
+                return;
+            }
+            
+            if (enteredCode === expectedOtpCode) {
+                // Success
+                document.getElementById('otpSwitchOverlay').classList.remove('active');
+                localStorage.setItem('current_driver_id', pendingOtpTargetId);
+                pendingOtpTargetId = null;
+                expectedOtpCode = null;
+                loadDriverApp();
+                showToast('สลับบัญชีสำเร็จ! ยืนยัน OTP ผ่าน ✅', 'var(--color-success)');
+            } else {
+                // Failure
+                errorMsg.textContent = '❌ รหัส OTP ไม่ถูกต้อง กรุณาลองใหม่';
+                ['otpD1', 'otpD2', 'otpD3', 'otpD4'].forEach(id => {
+                    document.getElementById(id).classList.add('error');
+                });
+                setTimeout(() => {
+                    ['otpD1', 'otpD2', 'otpD3', 'otpD4'].forEach(id => {
+                        document.getElementById(id).classList.remove('error');
+                    });
+                }, 600);
+            }
+        }
+
+        function otpAutoTab(currentInput, nextId) {
+            // Ensure only single digit
+            if (currentInput.value.length > 1) {
+                currentInput.value = currentInput.value.slice(-1);
+            }
+            if (currentInput.value && nextId) {
+                document.getElementById(nextId).focus();
+            }
+        }
+
+        function otpBackTab(event, currentInput, prevId) {
+            if (event.key === 'Backspace' && !currentInput.value && prevId) {
+                document.getElementById(prevId).focus();
+            }
+        }
+
+        function logoutDriver() {
+            localStorage.removeItem('current_driver_id');
+            currentDriverId = null;
+            stopGPSSimulator(currentDriverId);
+            isNavigating = false;
+            loadDriverApp();
+        }
+
+        function checkApprovalStatus() {
+            const drivers = DB.get("drivers");
+            const myDrv = drivers.find(d => d.id === currentDriverId);
+            
+            if (myDrv && myDrv.status === 'approved') {
+                showToast("บัญชีได้รับการอนุมัติเรียบร้อย!");
+                loadDriverApp();
+            } else {
+                showToast("ยังคงอยู่ในคิวตรวจอนุมัติ กรุณารอแอดมินหลังบ้านสักครู่", "var(--color-warning)");
+            }
+        }
+
+        function checkApprovalStateChange() {
+            if (!currentDriverId) return;
+            const drivers = DB.get("drivers");
+            const myDrv = drivers.find(d => d.id === currentDriverId);
+            
+            const isWaitingVisible = !document.getElementById('driverWaitingView').classList.contains('hidden');
+            
+            if (myDrv && myDrv.status === 'approved' && isWaitingVisible) {
+                showToast("อนุมัติสิทธิ์เข้าใช้งานสำเร็จ!");
+                loadDriverApp();
+            } else if (currentDriverId && isWaitingVisible === false) {
+                renderDriverDashboard();
+            }
+        }
+
+        // ---------------------------------------------------------
+        // DRIVER DASHBOARD RENDERING & SIMULATIONS
+        // ---------------------------------------------------------
+        function checkMidnightReset() {
+            if (!currentDriverId) return;
+            const orders = DB.get("orders");
+            const drivers = DB.get("drivers");
+            const myInfo = drivers.find(d => d.id === currentDriverId);
+            if (!myInfo) return;
+
+            // Only run midnight reset if driver is external (3pl)
+            if (myInfo.driverType !== '3pl') return;
+
+            const d = new Date();
+            const todayStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+            
+            let driverOrders = orders.filter(o => o.assignedDriverId === currentDriverId);
+            if (driverOrders.length === 0) return;
+
+            let dbChanged = false;
+            let backupCount = 0;
+
+            const updatedOrders = orders.filter(o => {
+                if (o.assignedDriverId === currentDriverId) {
+                    const orderDateStr = o.createdAt ? o.createdAt.split('T')[0] : todayStr;
+                    
+                    if (orderDateStr < todayStr) {
+                        backupOrderToGoogleSheet(o);
+                        backupCount++;
+                        dbChanged = true;
+                        return false; // delete from active database
+                    }
+                }
+                return true; // keep
+            });
+
+            if (dbChanged) {
+                DB.set("orders", updatedOrders);
+                showToast(`[ระบบ] เคลียร์ใบงานเมื่อวานสำเร็จ และสำรองข้อมูล ${backupCount} บิลขึ้น Google Sheets แล้ว!`, "var(--color-warning)");
+                window.dispatchEvent(new Event('storage-update'));
+            }
+        }
+
+        function renderDriverDashboard() {
+            if (!currentDriverId) return;
+            
+            checkMidnightReset();
+            
+            const drivers = DB.get("drivers");
+            const orders = DB.get("orders");
+            const locations = DB.get("driverLocations");
+
+            const myInfo = drivers.find(d => d.id === currentDriverId);
+            if (!myInfo) return;
+
+            document.getElementById('driverHeaderName').textContent = myInfo.name;
+            document.getElementById('driverHeaderWarehouse').textContent = `คลัง${myInfo.warehouse} [${myInfo.plate} ${myInfo.plateProvince}]`;
+            document.getElementById('driverAvatarBadge').textContent = myInfo.name.substring(0, 2);
+
+            const queueRequests = DB.get("queue_requests") || {};
+            const requestedIds = queueRequests[currentDriverId];
+            
+            let myJobs = orders.filter(o => o.assignedDriverId === currentDriverId);
+            
+            if (requestedIds && requestedIds.length > 0) {
+                // Sort by requestedIds order
+                myJobs.sort((a, b) => {
+                    const idxA = requestedIds.indexOf(a.id);
+                    const idxB = requestedIds.indexOf(b.id);
+                    if (idxA === -1 && idxB === -1) return a.routeSequence - b.routeSequence;
+                    if (idxA === -1) return 1;
+                    if (idxB === -1) return -1;
+                    return idxA - idxB;
+                });
+                document.getElementById('queueRequestStatus').style.display = 'block';
+            } else {
+                myJobs.sort((a,b) => a.routeSequence - b.routeSequence);
+                document.getElementById('queueRequestStatus').style.display = 'none';
+            }
+
+            const totalStops = myJobs.length;
+            const completedStops = myJobs.filter(o => o.status === 'success' || o.status === 'failed' || o.status === 'pending_review').length;
+
+            document.getElementById('driverCompletedVal').textContent = `${completedStops} / ${totalStops}`;
+
+            const myLoc = locations[currentDriverId] || { lat: DEPOT.lat, lng: DEPOT.lng };
+            document.getElementById('driverCoordsVal').textContent = `${myLoc.lat.toFixed(5)} / ${myLoc.lng.toFixed(5)}`;
+
+            // Render Route List matching Image 3 layout
+            const routeListContainer = document.getElementById('driverRouteListStops');
+            routeListContainer.innerHTML = '';
+            
+            if (myJobs.length === 0) {
+                routeListContainer.innerHTML = `<p style="font-size:0.8rem; color:var(--driver-text-muted); text-align:center; padding: 1rem 0;">ไม่มีแผนจัดส่งสำหรับคลังนี้</p>`;
+            } else {
+                myJobs.forEach((job, idx) => {
+                    let numCircleClass = 'waiting';
+                    let stopBadgeClass = 'waiting';
+                    let stopBadgeText = 'รอคิวส่ง';
+
+                    const isNextPending = myJobs.find(o => o.status !== 'success' && o.status !== 'failed' && o.status !== 'pending_review');
+                    const isCurrent = isNextPending && isNextPending.id === job.id;
+
+                    const isCompleted = job.status === 'success' || job.status === 'failed' || job.status === 'pending_review';
+
+                    const isRet = job.type === 'return';
+
+                    if (job.status === 'success' || job.status === 'pending_review') {
+                        numCircleClass = 'success';
+                        stopBadgeClass = 'success';
+                        stopBadgeText = isRet ? 'รับกลับสำเร็จ' : 'ส่งสำเร็จ';
+                    } else if (job.status === 'failed') {
+                        numCircleClass = 'failed';
+                        stopBadgeClass = 'failed';
+                        stopBadgeText = isRet ? 'รับกลับไม่สำเร็จ' : 'ไม่สำเร็จ';
+                    } else if (isCurrent || job.status === 'delivering') {
+                        numCircleClass = 'current';
+                        stopBadgeClass = 'current';
+                        stopBadgeText = isRet ? 'จุดรับกลับ' : 'จุดปัจจุบัน';
+                    } else {
+                        numCircleClass = 'waiting';
+                        stopBadgeClass = 'waiting';
+                        stopBadgeText = isRet ? 'รอรับกลับ' : 'รอคิวส่ง';
+                    }
+
+                    const payMapping = { cash: "เก็บเงินสดปลายทาง (COD)", transfer: "โอนเงินปลายทาง", cheque: "จ่ายเช็คปลายทาง", credit: "ระบบเครดิต", unpaid: "ค้างชำระหน้างาน" };
+                    const payMethodLbl = isRet ? 'ไม่มีเก็บเงิน (งานรับคืน)' : (payMapping[job.paymentStatus] || 'COD');
+
+                    let numCircleHtml = `<div class="stop-num-circle ${numCircleClass}" style="margin-right: 8px;">${idx + 1}</div>`;
+                    if (!isCompleted) {
+                        numCircleHtml = `
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 2px; margin-right: 8px;">
+                                <button onclick="requestMoveQueueItem('${job.id}', 'up')" style="background: rgba(255,255,255,0.05); border: 1px solid var(--driver-border); color: white; border-radius: 4px; padding: 1px 3px; font-size: 0.5rem; cursor: pointer; line-height: 1; border-color: rgba(255,255,255,0.2);">▲</button>
+                                <div class="stop-num-circle ${numCircleClass}" style="margin: 0;">${idx + 1}</div>
+                                <button onclick="requestMoveQueueItem('${job.id}', 'down')" style="background: rgba(255,255,255,0.05); border: 1px solid var(--driver-border); color: white; border-radius: 4px; padding: 1px 3px; font-size: 0.5rem; cursor: pointer; line-height: 1; border-color: rgba(255,255,255,0.2);">▼</button>
+                            </div>
+                        `;
+                    }
+
+                    routeListContainer.innerHTML += `
+                        <div class="route-stop-row">
+                            ${numCircleHtml}
+                            <div class="stop-details">
+                                <span class="stop-name">${job.customerName}</span>
+                                <span class="stop-subtext">${job.id} • ${payMethodLbl} • ${job.address}</span>
+                            </div>
+                            <span class="stop-pill-badge ${stopBadgeClass}">${stopBadgeText}</span>
+                        </div>
+                    `;
+                });
+            }
+
+            // Find current active job card
+            const activeJob = myJobs.find(o => o.status !== 'success' && o.status !== 'failed' && o.status !== 'pending_review');
+            const jobCardEl = document.getElementById('driverActiveJobCard');
+
+            if (!activeJob) {
+                activeJobId = null;
+                jobCardEl.innerHTML = `
+                    <div style="text-align:center; padding:2rem 0; color:var(--driver-text-muted);">
+                        <span style="font-size:2.5rem;">🎉</span>
+                        <h4 style="margin-top:1rem; color:var(--driver-text-main);">เสร็จสิ้นคิวเดินรถทั้งหมดแล้ว</h4>
+                        <p style="font-size:0.8rem; margin-top:0.3rem;">บันทึกรายงานครบถ้วน เดินทางกลับคลังปลอดภัย!</p>
+                    </div>
+                `;
+                drawDriverMap(myJobs, myLoc);
+                return;
+            }
+
+            activeJobId = activeJob.id;
+            
+            const isDeliveringState = activeJob.status === 'delivering';
+            const navBtnText = isDeliveringState ? "🧭 กำลังเดินทาง... (กดหยุดจำลอง)" : "🧭 แผนที่นำทาง (เปิด Google Maps)";
+            const navBtnClass = isDeliveringState ? "btn-driver-nav navigating" : "btn-driver-nav";
+            
+            const dist = calculateDistance(myLoc.lat, myLoc.lng, activeJob.lat, activeJob.lng);
+            const mockEta = Math.max(2, Math.round(dist * 3.5));
+
+            let auditAlertHtml = '';
+            if (activeJob.status === 'rejected_pod') {
+                auditAlertHtml = `<div class="audit-alert-banner">⚠️ <strong>บิลถูกปฏิเสธให้ส่งใหม่ (Resubmit):</strong> ${activeJob.adminNote || 'กรุณาตรวจสอบและอัปโหลดหลักฐานแก้ไข'}</div>`;
+            } else if (activeJob.status === 'request_info') {
+                auditAlertHtml = `<div class="audit-alert-banner" style="background:#fffbeb; border-color:#fde68a; color:#b45309;">⚠️ <strong>แอดมินขอข้อมูลเพิ่มเติม:</strong> ${activeJob.adminNote || 'กรุณากรอกชี้แจงตามเงื่อนไข'}</div>`;
+            }
+
+            // Generate remarks/time constraints display HTML (Phase 4.2 Update)
+            let remarksHtml = '';
+            if (activeJob.remarks) {
+                remarksHtml = '<div style="margin-top:0.8rem; background:#fffbeb; border:1px solid #fde68a; border-radius:12px; padding:0.8rem; text-align: left; color:#b45309;">' +
+                            '<strong style="font-size:0.85rem; display:block; margin-bottom:0.25rem;">⚠️ หมายเหตุ / เงื่อนไขจัดส่งพิเศษ:</strong>' +
+                            `<span style="font-size:1.1rem; font-weight:bold;">${activeJob.remarks}</span>` +
+                            '</div>';
+            }
+
+            const isRet = activeJob.type === 'return';
+            const jobTagText = isRet ? `งานรับกลับสินค้า จุดที่ #${activeJob.routeSequence}` : `คิวงานปัจจุบัน จุดที่ #${activeJob.routeSequence}`;
+            const codBadgeHtml = isRet ? `<span class="driver-cod-badge" style="background:#a78bfa; color:#0f172a; border-radius:6px; padding:3px 8px;">รับสินค้ากลับ</span>` : `<span class="driver-cod-badge">เก็บเงิน COD</span>`;
+            const codValText = isRet ? `รับสินค้า` : `฿${activeJob.codAmount.toLocaleString()}`;
+            const codLblText = isRet ? `รายการรับกลับ` : `ยอดเงินที่ต้องเก็บ`;
+
+            jobCardEl.innerHTML = `
+                ${auditAlertHtml}
+                <div class="driver-job-header">
+                    <div class="driver-job-title-row">
+                        <span class="driver-job-tag">${jobTagText}</span>
+                        <h3 class="driver-customer-name">${activeJob.customerName}</h3>
+                    </div>
+                    ${codBadgeHtml}
+                </div>
+                <p class="driver-address">${activeJob.address}</p>
+                
+                <!-- Remarks list instead of Excel items -->
+                ${remarksHtml}
+                
+                <div class="driver-job-meta-grid" style="margin-top: 1rem;">
+                    <div class="driver-job-meta-card">
+                        <div class="driver-meta-val" style="color:var(--color-primary); font-size:1.35rem !important;">${mockEta} นาที</div>
+                        <div class="driver-meta-lbl">เวลาคาดถึง</div>
+                    </div>
+                    <div class="driver-job-meta-card">
+                        <div class="driver-meta-val" style="font-size:1.35rem !important;">${dist.toFixed(1)} กม.</div>
+                        <div class="driver-meta-lbl">ระยะทางคลัง</div>
+                    </div>
+                    <div class="driver-job-meta-card">
+                        <div class="driver-meta-val" style="color:var(--color-warning); font-size:1.1rem !important; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${codValText}</div>
+                        <div class="driver-meta-lbl">${codLblText}</div>
+                    </div>
+                </div>
+
+                <div class="driver-actions-row">
+                    <button class="btn-driver-pod" onclick="openPodSheet()">📸 ถึงจุดหมาย / ส่งรายงาน POD</button>
+                    <button class="${navBtnClass}" onclick="handleNavigationClick()">${navBtnText}</button>
+                </div>
+            `;
+
+            drawDriverMap(myJobs, myLoc);
+        }
+
+        function requestMoveQueueItem(orderId, direction) {
+            const orders = DB.get("orders") || [];
+            let myJobs = orders.filter(o => o.assignedDriverId === currentDriverId);
+            
+            const queueRequests = DB.get("queue_requests") || {};
+            const requestedIds = queueRequests[currentDriverId];
+            if (requestedIds && requestedIds.length > 0) {
+                myJobs.sort((a, b) => {
+                    const idxA = requestedIds.indexOf(a.id);
+                    const idxB = requestedIds.indexOf(b.id);
+                    if (idxA === -1 && idxB === -1) return a.routeSequence - b.routeSequence;
+                    if (idxA === -1) return 1;
+                    if (idxB === -1) return -1;
+                    return idxA - idxB;
+                });
+            } else {
+                myJobs.sort((a, b) => a.routeSequence - b.routeSequence);
+            }
+
+            const index = myJobs.findIndex(o => o.id === orderId);
+            if (index === -1) return;
+
+            const targetIndex = direction === 'up' ? index - 1 : index + 1;
+            if (targetIndex >= 0 && targetIndex < myJobs.length) {
+                const currentJob = myJobs[index];
+                const targetJob = myJobs[targetIndex];
+                const isCompleted = o => o.status === 'success' || o.status === 'failed' || o.status === 'pending_review';
+                
+                if (!isCompleted(currentJob) && !isCompleted(targetJob)) {
+                    const temp = myJobs[index];
+                    myJobs[index] = myJobs[targetIndex];
+                    myJobs[targetIndex] = temp;
+                    
+                    const newIds = myJobs.map(o => o.id);
+                    queueRequests[currentDriverId] = newIds;
+                    DB.set("queue_requests", queueRequests);
+                    
+                    renderDriverDashboard();
+                } else {
+                    alert("ไม่สามารถสลับลำดับกับงานที่จัดส่งหรืออยู่ระหว่างตรวจบิลได้");
+                }
+            }
+        }
+
+        let driverGoogleMap = null;
+        let driverMapMarkers = [];
+        let driverMapPolylines = [];
+        let driverMapFirstFit = true;
+        const directionsCache = {};
+
+        function initGoogleMap() {
+            const mapEl = document.getElementById('googleMap');
+            if (mapEl && typeof google !== 'undefined') {
+                driverGoogleMap = new google.maps.Map(mapEl, {
+                    center: { lat: DEPOT.lat, lng: DEPOT.lng },
+                    zoom: 11,
+                    disableDefaultUI: true,
+                    zoomControl: true
+                });
+            }
+            renderDriverDashboard();
+        }
+
+        function getGoogleDirections(driverId, orders, routeColor, mapInstance, polylinesArray) {
+            if (orders.length === 0 || typeof google === 'undefined') return;
+
+            const orderIdsKey = orders.map(o => o.id).join("_");
+            const cacheKey = `${driverId}_${orderIdsKey}`;
+
+            const depotPos = { lat: DEPOT.lat, lng: DEPOT.lng };
+
+            if (directionsCache[cacheKey]) {
+                const polyline = new google.maps.Polyline({
+                    path: directionsCache[cacheKey],
+                    geodesic: true,
+                    strokeColor: routeColor,
+                    strokeOpacity: 0.75,
+                    strokeWeight: 3.8,
+                    map: mapInstance
+                });
+                polylinesArray.push(polyline);
+                return;
+            }
+
+            const directionsService = new google.maps.DirectionsService();
+
+            let origin = depotPos;
+            let destination = { lat: orders[orders.length - 1].lat, lng: orders[orders.length - 1].lng };
+            let waypoints = [];
+
+            if (orders.length > 1) {
+                for (let i = 0; i < orders.length - 1; i++) {
+                    waypoints.push({
+                        location: { lat: orders[i].lat, lng: orders[i].lng },
+                        stopover: true
+                    });
+                }
+            }
+
+            const request = {
+                origin: origin,
+                destination: destination,
+                waypoints: waypoints,
+                travelMode: google.maps.TravelMode.DRIVING
+            };
+
+            directionsService.route(request, (response, status) => {
+                if (status === google.maps.DirectionsStatus.OK) {
+                    const routePath = [];
+                    const legs = response.routes[0].legs;
+                    for (let i = 0; i < legs.length; i++) {
+                        const steps = legs[i].steps;
+                        for (let j = 0; j < steps.length; j++) {
+                            const path = steps[j].path;
+                            for (let k = 0; k < path.length; k++) {
+                                routePath.push({ lat: path[k].lat(), lng: path[k].lng() });
+                            }
+                        }
+                    }
+
+                    directionsCache[cacheKey] = routePath;
+
+                    const polyline = new google.maps.Polyline({
+                        path: routePath,
+                        geodesic: true,
+                        strokeColor: routeColor,
+                        strokeOpacity: 0.75,
+                        strokeWeight: 3.8,
+                        map: mapInstance
+                    });
+                    polylinesArray.push(polyline);
+                } else {
+                    // Fallback to straight line polyline if Directions API fails
+                    const straightCoords = [depotPos];
+                    orders.forEach(o => straightCoords.push({ lat: o.lat, lng: o.lng }));
+
+                    const fallbackPath = new google.maps.Polyline({
+                        path: straightCoords,
+                        geodesic: true,
+                        strokeColor: routeColor,
+                        strokeOpacity: 0.6,
+                        strokeWeight: 3.5,
+                        map: mapInstance
+                    });
+                    polylinesArray.push(fallbackPath);
+                }
+            });
+        }
+
+        // Draw real Google Map with markers and polyline route
+        function drawDriverMap(myJobs, myLoc) {
+            if (!driverGoogleMap || typeof google === 'undefined') return;
+
+            // Clear existing markers and polylines
+            driverMapMarkers.forEach(m => m.setMap(null));
+            driverMapMarkers = [];
+            driverMapPolylines.forEach(p => p.setMap(null));
+            driverMapPolylines = [];
+
+            const bounds = new google.maps.LatLngBounds();
+            
+            // Depot Marker
+            const depotPos = { lat: DEPOT.lat, lng: DEPOT.lng };
+            bounds.extend(depotPos);
+
+            const depotMarker = new google.maps.Marker({
+                position: depotPos,
+                map: driverGoogleMap,
+                label: {
+                    text: 'H',
+                    color: 'white',
+                    fontWeight: 'bold',
+                    fontSize: '12px'
+                },
+                icon: {
+                    path: google.maps.SymbolPath.CIRCLE,
+                    fillColor: '#10b981',
+                    fillOpacity: 1.0,
+                    scale: 12,
+                    strokeColor: '#ffffff',
+                    strokeWeight: 2
+                },
+                title: "คลังสินค้าหลัก (HQ Depot)"
+            });
+            driverMapMarkers.push(depotMarker);
+
+            const routeCoords = [depotPos];
+            const isNextPending = myJobs.find(o => o.status !== 'success' && o.status !== 'failed' && o.status !== 'pending_review');
+
+            myJobs.forEach(job => {
+                const jobPos = { lat: job.lat, lng: job.lng };
+                bounds.extend(jobPos);
+                routeCoords.push(jobPos);
+
+                const isCurrent = isNextPending && isNextPending.id === job.id;
+                let fillColor = '#f59e0b'; // Amber
+                let strokeColor = '#ffffff';
+                let strokeWeight = 2;
+                let scale = 11;
+
+                if (job.status === 'success' || job.status === 'pending_review') {
+                    fillColor = '#10b981'; // Green
+                } else if (job.status === 'failed') {
+                    fillColor = '#ef4444'; // Red
+                } else if (isCurrent) {
+                    fillColor = '#2563eb'; // Blue
+                    scale = 13;
+                    strokeWeight = 3;
+                }
+
+                const marker = new google.maps.Marker({
+                    position: jobPos,
+                    map: driverGoogleMap,
+                    label: {
+                        text: String(job.routeSequence),
+                        color: 'white',
+                        fontWeight: 'bold',
+                        fontSize: '11px'
+                    },
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        fillColor: fillColor,
+                        fillOpacity: 1.0,
+                        scale: scale,
+                        strokeColor: strokeColor,
+                        strokeWeight: strokeWeight
+                    },
+                    title: `${job.customerName} - จุดที่ #${job.routeSequence}`
+                });
+                driverMapMarkers.push(marker);
+            });
+
+            getGoogleDirections(currentDriverId || 'driver', myJobs, '#2563eb', driverGoogleMap, driverMapPolylines);
+
+            const carPos = { lat: myLoc.lat, lng: myLoc.lng };
+            bounds.extend(carPos);
+
+            const vehicleMarker = new google.maps.Marker({
+                position: carPos,
+                map: driverGoogleMap,
+                icon: {
+                    path: google.maps.SymbolPath.CIRCLE,
+                    fillColor: '#2563eb',
+                    fillOpacity: 0.9,
+                    scale: 14,
+                    strokeColor: '#ffffff',
+                    strokeWeight: 2
+                },
+                label: {
+                    text: '🚚',
+                    fontSize: '14px'
+                },
+                title: "ตำแหน่งรถของคุณ"
+            });
+            driverMapMarkers.push(vehicleMarker);
+
+            if (driverMapFirstFit) {
+                driverGoogleMap.fitBounds(bounds);
+                driverMapFirstFit = false;
+            }
+        }
+
+        // Simulates GPS transit AND triggers Google Maps External Redirect
+        function handleNavigationClick() {
+            const orders = DB.get("orders");
+            const activeJob = orders.find(o => o.id === activeJobId);
+            if (!activeJob) return;
+
+            const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${activeJob.lat},${activeJob.lng}`;
+            window.open(googleMapsUrl, "_blank");
+
+            toggleNavigationSimulation();
+        }
+
+        function toggleNavigationSimulation() {
+            if (isNavigating) {
+                stopGPSSimulator(currentDriverId);
+                isNavigating = false;
+                
+                const orders = DB.get("orders");
+                const currentJob = orders.find(o => o.id === activeJobId);
+                if (currentJob && currentJob.status === "delivering") {
+                    currentJob.status = "pending";
+                    DB.set("orders", orders);
+                }
+                
+                renderDriverDashboard();
+                showToast("หยุดตัวนำทางจำลอง", "var(--color-danger)");
+            } else {
+                isNavigating = true;
+                showToast("เปิด Google Maps & GPS จำลองวิ่ง...", "var(--color-primary)");
+                renderDriverDashboard();
+                
+                startGPSSimulator(currentDriverId, (stepData, error) => {
+                    if (error) {
+                        isNavigating = false;
+                        renderDriverDashboard();
+                        return;
+                    }
+                    
+                    if (stepData.arrived) {
+                        isNavigating = false;
+                        stopGPSSimulator(currentDriverId);
+                        renderDriverDashboard();
+                        showToast("ถึงเป้าหมายแล้ว! กรุณาเช็คอินอัปโหลด POD", "var(--color-success)");
+                    } else {
+                        const myLoc = { lat: stepData.lat, lng: stepData.lng };
+                        document.getElementById('driverCoordsVal').textContent = `${myLoc.lat.toFixed(5)} / ${myLoc.lng.toFixed(5)}`;
+                        
+                        const activeRoute = DB.get("orders").filter(o => o.assignedDriverId === currentDriverId).sort((a,b)=>a.routeSequence - b.routeSequence);
+                        drawDriverMap(activeRoute, myLoc);
+                    }
+                });
+            }
+        }
+
+        // ---------------------------------------------------------
+        // PROOF OF DELIVERY (POD) FLOW & HANDLERS
+        // ---------------------------------------------------------
+        function openPodSheet() {
+            const orders = DB.get("orders");
+            const currentJob = orders.find(o => o.id === activeJobId);
+            if (!currentJob) return;
+
+            const isReturn = currentJob.type === 'return';
+
+            // Update Header Title
+            const podTitleSpan = document.querySelector('#podSheetOverlay .pod-title span');
+            if (podTitleSpan) {
+                podTitleSpan.textContent = isReturn ? "ส่งรายงานหลักฐานรับสินค้าคืน (POD)" : "ส่งรายงานหลักฐานงาน (POD)";
+            }
+
+            // Update Success / Fail button texts
+            const successBtn = document.getElementById('toggleSuccessBtn');
+            const failBtn = document.getElementById('toggleFailBtn');
+            if (successBtn) {
+                successBtn.innerHTML = isReturn ? "✓ รับกลับสำเร็จ" : "✓ จัดส่งสำเร็จ";
+            }
+            if (failBtn) {
+                failBtn.innerHTML = isReturn ? "✕ รับกลับไม่สำเร็จ" : "✕ จัดส่งไม่สำเร็จ";
+            }
+
+            // Update Failure reasons select options dynamically
+            const failSelect = document.getElementById('podFailReasonSelect');
+            if (failSelect) {
+                if (isReturn) {
+                    failSelect.innerHTML = `
+                        <option value="ติดต่อลูกค้าไม่ได้">📞 ติดต่อลูกค้าไม่ได้/ลูกค้าไม่อยู่</option>
+                        <option value="ลูกค้าปฏิเสธการส่งคืน">⛔ ลูกค้าปฏิเสธการส่งคืนสินค้า</option>
+                        <option value="สินค้าไม่อยู่ในสภาพที่จะรับคืน">📦 สินค้าไม่อยู่ในสภาพที่จะรับคืน</option>
+                        <option value="ไม่มีสินค้าเตรียมไว้">❌ ไม่มีสินค้าเตรียมไว้ให้รับกลับ</option>
+                        <option value="อื่นๆ">❓ อื่นๆ (ระบุเพิ่มในหมายเหตุ)</option>
+                    `;
+                } else {
+                    failSelect.innerHTML = `
+                        <option value="ติดต่อลูกค้าไม่ได้">📞 ลูกค้าไม่รับสาย/ไม่สามารถติดต่อได้</option>
+                        <option value="ที่อยู่ไม่ถูกต้อง">📍 ที่อยู่จัดส่งไม่ถูกต้อง/หาบ้านไม่เจอ</option>
+                        <option value="ลูกค้าปฏิเสธการรับสินค้า">⛔ ลูกค้าปฏิเสธรับเนื่องจากไม่ได้สั่ง/สั่งซ้ำ</option>
+                        <option value="สินค้าชำรุดเสียหาย">📦 ตัวสินค้าชำรุดเสียหายก่อนส่งมอบ</option>
+                        <option value="อื่นๆ">❓ อื่นๆ (ระบุเพิ่มในหมายเหตุ)</option>
+                    `;
+                }
+            }
+
+            // Hide/Show payment group
+            const paymentGroup = document.querySelector('#podSheetOverlay .payment-group');
+            if (paymentGroup) {
+                paymentGroup.style.display = isReturn ? 'none' : 'block';
+            }
+
+            document.getElementById('podSheetCodVal').textContent = currentJob.codAmount ? currentJob.codAmount.toLocaleString() : '0';
+            
+            selectPaymentMethod('cash');
+            document.getElementById('unpaidCheckbox').checked = false;
+            document.getElementById('unpaidReasonSection').classList.remove('active');
+            document.getElementById('payPhotoSection').classList.add('active');
+
+            podPhotos = [];
+            renderPodPhotosGrid();
+            paymentPhotoData = null;
+            
+            const podPhotoPreview = document.getElementById('podPhotoPreview');
+            if (podPhotoPreview) podPhotoPreview.style.display = 'none';
+            const podPhotoLabel = document.getElementById('podPhotoLabel');
+            if (podPhotoLabel) podPhotoLabel.style.display = 'block';
+            
+            document.getElementById('paymentPhotoPreview').style.display = 'none';
+            document.getElementById('paymentPhotoLabel').style.display = 'block';
+
+            clearSignatureCanvas();
+            setPodStatus(true);
+
+            document.getElementById('podSheetOverlay').classList.add('active');
+        }
+
+        function hidePodSheet() {
+            document.getElementById('podSheetOverlay').classList.remove('active');
+        }
+
+        function setPodStatus(success) {
+            podSuccessStatus = success;
+            const successBtn = document.getElementById('toggleSuccessBtn');
+            const failBtn = document.getElementById('toggleFailBtn');
+            
+            const successFields = document.getElementById('podSuccessFields');
+            const failFields = document.getElementById('podFailFields');
+            const photoLabel = document.getElementById('photoUploadLabelText');
+
+            const orders = DB.get("orders");
+            const currentJob = orders.find(o => o.id === activeJobId);
+            const isReturn = currentJob && currentJob.type === 'return';
+
+            if (success) {
+                successBtn.classList.add('active');
+                failBtn.classList.remove('active');
+                successFields.classList.add('active');
+                failFields.classList.remove('active');
+                photoLabel.textContent = isReturn ? "1. ถ่ายรูปหลักฐานการรับสินค้าคืน (บังคับ)" : "1. ถ่ายรูปใบเสร็จ/พัสดุ สินค้าถึงหน้างาน (บังคับ)";
+            } else {
+                successBtn.classList.remove('active');
+                failBtn.classList.add('active');
+                successFields.classList.remove('active');
+                failFields.classList.add('active');
+                photoLabel.textContent = isReturn ? "📷 ถ่ายรูปรายงานปัญหาการรับคืนไม่สำเร็จ (บังคับ)" : "📷 ถ่ายรูปรายงานปัญหาจัดส่งไม่สำเร็จ (บังคับ)";
+            }
+        }
+
+        function selectPaymentMethod(method) {
+            selectedPayMethod = method;
+            
+            document.querySelectorAll('.pay-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`payBtn-${method}`).classList.add('active');
+
+            const isUnpaid = document.getElementById('unpaidCheckbox').checked;
+            
+            if (isUnpaid) {
+                document.getElementById('payPhotoSection').classList.remove('active');
+            } else {
+                if (method === 'credit') {
+                    document.getElementById('payPhotoSection').classList.remove('active');
+                } else {
+                    document.getElementById('payPhotoSection').classList.add('active');
+                }
+            }
+        }
+
+        function toggleUnpaidState(checkbox) {
+            const isUnpaid = checkbox.checked;
+            const payPhotoSec = document.getElementById('payPhotoSection');
+            const unpaidSec = document.getElementById('unpaidReasonSection');
+
+            if (isUnpaid) {
+                payPhotoSec.classList.remove('active');
+                unpaidSec.classList.add('active');
+            } else {
+                unpaidSec.classList.remove('active');
+                if (selectedPayMethod !== 'credit') {
+                    payPhotoSec.classList.add('active');
+                }
+            }
+        }
+
+        function triggerMockPhotoUpload(type) {
+            let labelText = "";
+            let previewImg = null;
+            let hiddenLabel = null;
+
+            const orders = DB.get("orders");
+            const currentJob = orders.find(o => o.id === activeJobId);
+            const isReturn = currentJob && currentJob.type === 'return';
+
+            if (type === 'pod') {
+                if (podSuccessStatus) {
+                    labelText = isReturn ? `รูปถ่ายการรับสินค้าคืนสำเร็จ #${podPhotos.length + 1}` : `รูปถ่ายการจัดส่งพัสดุสำเร็จ #${podPhotos.length + 1}`;
+                } else {
+                    labelText = isReturn ? `รูปถ่ายปัญหาการรับคืนไม่สำเร็จ #${podPhotos.length + 1}` : `รูปถ่ายปัญหาจัดส่งไม่สำเร็จ #${podPhotos.length + 1}`;
+                }
+                const colorsMap = {
+                    pod: podSuccessStatus ? (isReturn ? ["#7c3aed", "#a78bfa"] : ["#059669", "#10b981"]) : ["#dc2626", "#ef4444"]
+                };
+                const mockBase64 = createMockImageBase64(labelText, colorsMap.pod);
+                podPhotos.push(mockBase64);
+                renderPodPhotosGrid();
+                showToast("จำลองถ่ายภาพสำเร็จ");
+            } else {
+                labelText = `บิลใบเสร็จชำระเงิน (${selectedPayMethod.toUpperCase()})`;
+                previewImg = document.getElementById('paymentPhotoPreview');
+                hiddenLabel = document.getElementById('paymentPhotoLabel');
+                const colorsMap = ["#2563eb", "#06b6d4"];
+                const mockBase64 = createMockImageBase64(labelText, colorsMap);
+                paymentPhotoData = mockBase64;
+                previewImg.src = mockBase64;
+                previewImg.style.display = 'block';
+                hiddenLabel.style.display = 'none';
+                showToast("ถ่ายภาพหลักฐานเรียบร้อย (กล้องจำลอง)");
+            }
+        }
+
+        function renderPodPhotosGrid() {
+            const grid = document.getElementById('podPhotosGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            if (podPhotos.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 1.5rem; color: var(--driver-text-muted); font-size: 0.85rem; border: 2px dashed rgba(255,255,255,0.1); border-radius: 12px; background: rgba(255,255,255,0.02);">
+                        ⚠️ ยังไม่มีรูปถ่ายแนบ (ต้องการอย่างน้อย 1 รูป)
+                    </div>
+                `;
+                return;
+            }
+
+            podPhotos.forEach((src, idx) => {
+                grid.innerHTML += `
+                    <div class="pod-photo-thumbnail">
+                        <img src="${src}" alt="POD Photo ${idx + 1}">
+                        <button class="pod-photo-remove" onclick="removePodPhoto(${idx}); event.stopPropagation();">✕</button>
+                    </div>
+                `;
+            });
+        }
+
+        function removePodPhoto(idx) {
+            podPhotos.splice(idx, 1);
+            renderPodPhotosGrid();
+        }
+
+        function handlePodAlbumUpload(input) {
+            const files = input.files;
+            if (!files || files.length === 0) return;
+
+            let loadedCount = 0;
+            const targetCount = files.length;
+
+            for (let i = 0; i < files.length; i++) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    podPhotos.push(e.target.result);
+                    loadedCount++;
+                    if (loadedCount === targetCount) {
+                        renderPodPhotosGrid();
+                        showToast(`โหลดรูปภาพจากอัลบั้มสำเร็จ ${targetCount} รูป`);
+                    }
+                };
+                reader.readAsDataURL(files[i]);
+            }
+            input.value = '';
+        }
+
+        function initSignatureCanvas() {
+            canvas = document.getElementById('signatureCanvas');
+            ctx = canvas.getContext('2d');
+
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = 120;
+
+            canvas.addEventListener('mousedown', startDrawing);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDrawing);
+            canvas.addEventListener('mouseout', stopDrawing);
+
+            canvas.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                const touch = e.touches[0];
+                const rect = canvas.getBoundingClientRect();
+                ctx.beginPath();
+                ctx.moveTo(touch.clientX - rect.left, touch.clientY - rect.top);
+                drawing = true;
+            });
+            
+            canvas.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                if (!drawing) return;
+                const touch = e.touches[0];
+                const rect = canvas.getBoundingClientRect();
+                ctx.lineTo(touch.clientX - rect.left, touch.clientY - rect.top);
+                ctx.strokeStyle = '#0f172a';
+                ctx.lineWidth = 2.5;
+                ctx.lineCap = 'round';
+                ctx.stroke();
+            });
+
+            canvas.addEventListener('touchend', stopDrawing);
+        }
+
+        function startDrawing(e) {
+            const rect = canvas.getBoundingClientRect();
+            ctx.beginPath();
+            ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+            drawing = true;
+        }
+
+        function draw(e) {
+            if (!drawing) return;
+            const rect = canvas.getBoundingClientRect();
+            ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+            ctx.strokeStyle = '#0f172a';
+            ctx.lineWidth = 2.5;
+            ctx.lineCap = 'round';
+            ctx.stroke();
+        }
+
+        function stopDrawing() {
+            drawing = false;
+        }
+
+        function clearSignatureCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function submitPOD() {
+            if (!activeJobId) return;
+
+            const orders = DB.get("orders");
+            const locations = DB.get("driverLocations");
+            const jobIdx = orders.findIndex(o => o.id === activeJobId);
+
+            if (jobIdx === -1) return;
+
+            const orderToUpdate = orders[jobIdx];
+            const isReturn = orderToUpdate.type === 'return';
+
+            // 1. Mandatory Photo validation for BOTH success and failure matching user requirement
+            if (podPhotos.length === 0) {
+                if (podSuccessStatus) {
+                    if (isReturn) {
+                        alert("กรุณาถ่ายภาพยืนยันการรับสินค้าคืนก่อนกดส่งงาน!");
+                    } else {
+                        alert("กรุณาถ่ายภาพยืนยันมอบพัสดุก่อนกดส่งงาน!");
+                    }
+                } else {
+                    if (isReturn) {
+                        alert("กรุณาถ่ายภาพรายงานปัญหาการรับคืนไม่สำเร็จก่อนกดยืนยัน!");
+                    } else {
+                        alert("กรุณาถ่ายภาพรายงานปัญหาจัดส่งไม่สำเร็จ (เช่น ปิดบ้าน/พัสดุเสียหาย) ก่อนกดยืนยัน!");
+                    }
+                }
+                return;
+            }
+
+            if (podSuccessStatus) {
+                if (isReturn) {
+                    orderToUpdate.status = 'pending_review';
+                    orderToUpdate.podPhotos = podPhotos;
+                    orderToUpdate.podPhoto = podPhotos[0];
+                    orderToUpdate.paymentStatus = 'unpaid';
+                    orderToUpdate.paymentPhoto = null;
+                } else {
+                    const isUnpaid = document.getElementById('unpaidCheckbox').checked;
+                    if (!isUnpaid && selectedPayMethod !== 'credit' && !paymentPhotoData) {
+                        alert(`กรุณาถ่ายรูปบิลใบเสร็จ/การโอนปลายทาง ${selectedPayMethod.toUpperCase()} เพื่อแนบเข้ายืนยัน!`);
+                        return;
+                    }
+
+                    orderToUpdate.status = 'pending_review';
+                    orderToUpdate.podPhotos = podPhotos;
+                    orderToUpdate.podPhoto = podPhotos[0];
+                    
+                    if (isUnpaid) {
+                        orderToUpdate.paymentStatus = 'unpaid';
+                        orderToUpdate.unpaidReason = document.getElementById('unpaidReasonSelect').value;
+                        orderToUpdate.paymentPhoto = null;
+                    } else {
+                        orderToUpdate.paymentStatus = selectedPayMethod;
+                        orderToUpdate.paymentPhoto = paymentPhotoData;
+                    }
+                }
+
+                const sigBase64 = canvas.toDataURL();
+                orderToUpdate.signaturePhoto = sigBase64;
+            } 
+            else {
+                // Failed delivery with mandatory failed photo proof
+                orderToUpdate.status = 'failed';
+                orderToUpdate.failReason = document.getElementById('podFailReasonSelect').value;
+                orderToUpdate.podPhotos = podPhotos;
+                orderToUpdate.podPhoto = podPhotos[0]; // Save failure photo proof
+                orderToUpdate.paymentStatus = 'unpaid';
+                orderToUpdate.paymentPhoto = null;
+            }
+
+            orderToUpdate.timestamp = new Date().toISOString();
+            
+            DB.set("orders", orders);
+
+            if (locations[currentDriverId]) {
+                locations[currentDriverId].currentStopIndex = orderToUpdate.routeSequence + 1;
+                locations[currentDriverId].lat = orderToUpdate.lat;
+                locations[currentDriverId].lng = orderToUpdate.lng;
+                DB.set("driverLocations", locations);
+            }
+
+            isNavigating = false;
+            hidePodSheet();
+            renderDriverDashboard();
+            
+            showToast("ส่งรายงานอัปเดตเข้าแอดมิน HQ สำเร็จ!", "var(--color-success)");
+        }
+
+        function showToast(text, color = "var(--color-success)") {
+            const toast = document.getElementById('toastBox');
+            const toastText = document.getElementById('toastText');
+            
+            toastText.textContent = text;
+            toast.style.background = color === 'var(--color-success)' ? '#065f46' : (color === 'var(--color-primary)' ? '#1e3a8a' : '#78350f');
+            toast.classList.add('show');
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Dynamic Google Maps API loader
+        function loadGoogleMapsAPI(callbackName) {
+            const key = localStorage.getItem('google_maps_api_key') || '';
+            const script = document.createElement('script');
+            script.src = `https://maps.googleapis.com/maps/api/js?key=${key}&callback=${callbackName}&v=weekly`;
+            script.async = true;
+            script.defer = true;
+            document.head.appendChild(script);
+        }
+
+        function promptGoogleMapsApiKey(e) {
+            if (e) e.preventDefault();
+            const currentKey = localStorage.getItem('google_maps_api_key') || '';
+            const newKey = prompt("กรุณากรอก Google Maps API Key ของคุณ:", currentKey);
+            if (newKey !== null) {
+                localStorage.setItem('google_maps_api_key', newKey.trim());
+                alert("บันทึก API Key เรียบร้อยแล้ว ระบบจะทำการรีโหลดหน้าเพื่อเริ่มใช้งาน");
+                location.reload();
+            }
+        }
+
+        // Load Google Maps
+        loadGoogleMapsAPI('initGoogleMap');
+    </script>
+</body>
+</html>

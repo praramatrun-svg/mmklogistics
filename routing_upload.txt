@@ -1,0 +1,21 @@
+407:                                 <button class="btn btn-outline btn-sm" style="flex: 1; font-size: 0.78rem; padding: 6px;" onclick="downloadSampleTemplate(event)">
+562:                             <button onclick="downloadSampleDriverCSV()" class="btn btn-outline" style="padding: 0.45rem 0.9rem; font-size: 0.8rem; font-weight: bold; border-color: 
+1191:         let tempUploadedOrders = [];
+2053:                     const parsedOrders = parseCSVText(text);
+2082:                 let id = row.A || row["stop_id"] || row["หมายเลขจุดส่ง หรือ ID ของกล่องสินค้า\n(ห้ามซ้ำ)"] || row["ID"];
+2085:                 let customerName = row.D || row["customer_id"] || row["รหัสลูกค้า"] || row["ชื่อลูกค้า"];
+2137:             tempUploadedOrders = parsedOrders;
+2170:             if (tempUploadedOrders.length === 0) {
+2177:             if (countBadge) countBadge.textContent = `${tempUploadedOrders.length} ออเดอร์`;
+2179:             tempUploadedOrders.forEach((ord, index) => {
+2276:                 if (tempUploadedOrders.length > 0) {
+2361:                 tempUploadedOrders = [];
+2374:             if (tempUploadedOrders.length === 0) {
+2386:             const totalNewOrders = tempUploadedOrders.length;
+2388:             tempUploadedOrders.forEach(o => {
+2427:                 tempUploadedOrders.forEach((o, index) => {
+2450:             if (tempUploadedOrders.length === 0 || !selectedAssignDriverId) return;
+2457:             tempUploadedOrders.forEach((newOrd, index) => {
+2496:             tempUploadedOrders = [];
+2513:         function downloadSampleTemplate(event) {
+3944:         function downloadSampleDriverCSV() {

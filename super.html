@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Admin System Control - AI Logistics</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Embedded styling helper for Super Admin Dashboard */
+        .super-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: radial-gradient(circle at top right, rgba(236, 72, 153, 0.12), transparent),
+                        radial-gradient(circle at bottom left, rgba(239, 68, 68, 0.08), transparent),
+                        #070a13;
+            padding: 2rem;
+        }
+        .super-login-card {
+            background: var(--hq-bg-card);
+            border: 1px solid var(--hq-border);
+            border-radius: 24px;
+            padding: 3rem 2.5rem;
+            width: 100%;
+            max-width: 440px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(16px);
+        }
+        .super-status-badge {
+            font-size: 0.75rem;
+            font-weight: bold;
+            padding: 4px 10px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+        .badge-pending {
+            background: rgba(245, 158, 11, 0.12);
+            color: var(--color-warning);
+        }
+        .badge-approved {
+            background: rgba(16, 185, 129, 0.12);
+            color: var(--color-success);
+        }
+        .badge-rejected {
+            background: rgba(239, 68, 68, 0.12);
+            color: var(--color-danger);
+        }
+        .action-group {
+            display: flex;
+            gap: 6px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. LOGIN INTERFACE (Rendered if not logged in) -->
+    <div id="superLoginSection" class="super-container" style="display: none !important;">
+        <div class="super-login-card">
+            <div style="font-size: 3.5rem; margin-bottom: 1rem;">🔑</div>
+            <h3 style="font-size: 1.8rem; color: white; margin-bottom: 0.5rem; font-family: var(--font-heading);">Super Admin Control</h3>
+            <p style="color: var(--hq-text-muted); font-size: 0.9rem; margin-bottom: 2rem;">ลงชื่อเข้าใช้ด้วยบัญชีผู้ควบคุมระบบหลักเพื่อจัดการสิทธิ์</p>
+            
+            <form onsubmit="handleSuperLogin(event)">
+                <div style="display:flex; flex-direction:column; gap:1.2rem; text-align:left; margin-bottom:2rem;">
+                    <div class="form-group">
+                        <label class="form-label">ชื่อผู้ใช้งานหลัก (Username)</label>
+                        <input type="text" id="superUsername" class="form-input" style="background:rgba(255,255,255,0.03); color:white;" placeholder="ระบุ username" required autofocus>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">รหัสผ่านระบบ (Password)</label>
+                        <input type="password" id="superPassword" class="form-input" style="background:rgba(255,255,255,0.03); color:white;" placeholder="ระบุ password" required>
+                    </div>
+                    <span id="loginError" style="color: var(--color-danger); font-size: 0.85rem; text-align: center; display: none;"></span>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 0.8rem;">
+                    <button type="submit" class="btn btn-primary" style="width:100%; padding:0.9rem; font-size:1rem; background: linear-gradient(135deg, var(--color-danger), var(--color-secondary)); border:none;">
+                        เข้าสู่ระบบควบคุม (Login)
+                    </button>
+                    <a href="index.html" class="btn btn-outline" style="width:100%; text-align:center; padding:0.8rem; text-decoration:none; display:block; font-size:0.9rem;">
+                        ย้อนกลับไปหน้าแรก
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 2. DASHBOARD INTERFACE (Rendered if logged in) -->
+    <div id="superDashboardSection" class="hq-layout" style="display: none !important;">
+        <!-- Left Sidebar -->
+        <aside class="hq-sidebar" style="border-right: 1px solid rgba(236, 72, 153, 0.15);">
+            <div>
+                <div class="hq-brand" style="color: var(--color-danger);">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width: 28px; height: 28px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25a3 3 0 0 1 3 3m3 0a6 6 0 0 1-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-.999.43-1.563A6 6 0 1 1 21.75 8.25Z" />
+                    </svg>
+                    <span>SUPER CONTROL</span>
+                </div>
+                <ul class="hq-menu">
+                    <li class="hq-menu-item active" id="menu-hq-list" onclick="switchSuperTab('hq-list')">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                        บัญชีเจ้าหน้าที่
+                    </li>
+                    <li class="hq-menu-item" id="menu-drv-list" onclick="switchSuperTab('drv-list')">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10M21 16V10a2 2 0 00-2-2h-6v8h8z" />
+                        </svg>
+                        บัญชีคนขับ
+                    </li>
+                    <li class="hq-menu-item" id="menu-hq-create" onclick="switchSuperTab('hq-create')">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                        </svg>
+                        จัดการบัญชีเจ้าหน้าที่
+                    </li>
+                    <li class="hq-menu-item" id="menu-drv-create" onclick="switchSuperTab('drv-create')">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                        </svg>
+                        จัดการบัญชีคนขับ
+                    </li>
+                    <li class="hq-menu-item" id="menu-user-manage" onclick="switchSuperTab('user-manage')">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                        จัดการ user
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="hq-user-panel">
+                <div class="hq-user-avatar" style="background: linear-gradient(135deg, var(--color-danger), var(--color-secondary)); color:white;">SA</div>
+                <div>
+                    <h5 style="font-size: 0.9rem; color: white;">Super Admin</h5>
+                    <p style="font-size: 0.75rem; color: var(--hq-text-muted);">username: mmk-mt</p>
+                </div>
+                <a href="#" onclick="handleSuperLogout(event)" style="margin-left: auto; color: var(--color-danger);" title="ออกระบบ">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width: 20px; height: 20px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
+                    </svg>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="hq-content">
+            <!-- Header -->
+            <header class="hq-header">
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+                <div>
+                    <h1 style="font-size: 1.8rem; color: white;" id="superDashboardTitle">ระบบควบคุมสิทธิ์บัญชี Admin HQ</h1>
+                    <p style="color: var(--hq-text-muted); font-size: 0.9rem;" id="superDashboardSubtitle">ควบคุมการเข้าใช้งานคลังสินค้า อนุมัติบัญชีสมัครใหม่ หรือระงับสิทธิ์ชั่วคราว</p>
+                </div>
+                <div style="display: flex; gap: 1rem; align-items: center;">
+                    <a href="index.html" class="btn btn-outline">
+                        🏡 กลับสู่หน้าหลัก Portal
+                    </a>
+                </div>
+            </header>
+
+            <!-- TAB 1: HQ ACCOUNTS LIST -->
+            <div id="tab-hq-list" class="tab-content">
+                <div class="hq-panel">
+                    <div class="hq-panel-header" style="margin-bottom: 1.5rem;">
+                        <h3 class="hq-panel-title">ทำเนียบรายชื่อบัญชีเจ้าหน้าที่คลังสินค้า</h3>
+                    </div>
+                    <div class="hq-table-container">
+                        <table class="hq-table">
+                            <thead>
+                                <tr>
+                                    <th>ชื่อแอดมิน</th>
+                                    <th>Username</th>
+                                    <th>คลังที่รับผิดชอบ</th>
+                                    <th>วันที่ลงทะเบียน</th>
+                                    <th>สถานะสิทธิ์</th>
+                                    <th style="width: 200px;">การจัดการ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="accountsTableBody">
+                                <!-- Injected by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: DRIVER ACCOUNTS LIST -->
+            <div id="tab-drv-list" class="tab-content" style="display: none;">
+                <div class="hq-panel">
+                    <div class="hq-panel-header" style="margin-bottom: 1.5rem;">
+                        <h3 class="hq-panel-title">ทำเนียบพนักงานขับรถ & การอนุมัติสิทธิ์ (พนักงานขับรถทั้งหมด)</h3>
+                    </div>
+                    <div class="hq-table-container">
+                        <table class="hq-table">
+                            <thead>
+                                <tr>
+                                    <th>รหัสระบบ</th>
+                                    <th>ประเภท</th>
+                                    <th>ชื่อ-นามสกุล</th>
+                                    <th>เบอร์โทรศัพท์</th>
+                                    <th>เลขทะเบียน</th>
+                                    <th>จังหวัด</th>
+                                    <th>คลังสังกัด</th>
+                                    <th>ประเภทรถ</th>
+                                    <th>น้ำหนักบรรทุกสูงสุด (Max Capacity)</th>
+                                    <th>สถานะสิทธิ์</th>
+                                    <th style="width: 220px;">การจัดการ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="superDriverTableBody">
+                                <!-- Injected by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: CREATE HQ ACCOUNT FORM -->
+            <div id="tab-hq-create" class="tab-content" style="display: none;">
+                <div class="hq-panel" style="max-width: 600px; margin: 0 auto;">
+                    <div class="hq-panel-header" style="margin-bottom: 1.5rem;">
+                        <h3 class="hq-panel-title">สร้างบัญชี Admin HQ ใหม่</h3>
+                    </div>
+                    <form id="createAccountForm" onsubmit="handleCreateAccount(event)">
+                        <div style="display: flex; flex-direction: column; gap: 1rem;">
+                            <div class="form-group">
+                                <label class="form-label">ชื่อผู้ใช้งาน (Username) *ห้ามซ้ำ*</label>
+                                <input type="text" id="newAccUsername" class="form-input" placeholder="เช่น korat_admin" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">รหัสผ่าน (Password)</label>
+                                <input type="password" id="newAccPassword" class="form-input" placeholder="ขั้นต่ำ 4 ตัวอักษร" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">ชื่อ-นามสกุล เจ้าหน้าที่</label>
+                                <input type="text" id="newAccName" class="form-input" placeholder="เช่น นายวิทยา มั่นคง" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">คลังสินค้าผู้ดูแลหลัก</label>
+                                <select id="newAccWarehouse" class="form-select" required>
+                                    <option value="all">Admin Logistics (ดูได้ทุกคลัง)</option>
+                                    <option value="สุขสวัสดิ์">คลังสุขสวัสดิ์ (Suksawat)</option>
+                                    <option value="พัทยา">คลังพัทยา (Pattaya)</option>
+                                    <option value="โคราช">คลังโคราช (Korat)</option>
+                                    <option value="ปราจีนบุรี">คลังปราจีนบุรี (Prachinburi)</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="margin-top: 1rem; width: 100%; background: var(--color-success); border:none;">
+                                ➕ สร้างบัญชีและอนุมัติทันที
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- TAB 4: CREATE DRIVER ACCOUNT FORM -->
+            <div id="tab-drv-create" class="tab-content" style="display: none;">
+                <div class="hq-panel" style="max-width: 600px; margin: 0 auto;">
+                    <div class="hq-panel-header" style="margin-bottom: 1.5rem;">
+                        <h3 class="hq-panel-title">สร้างบัญชีคนขับใหม่</h3>
+                    </div>
+                    <form id="createDriverForm" onsubmit="handleCreateDriver(event)">
+                        <div style="display: flex; flex-direction: column; gap: 1rem;">
+                            <div class="form-group">
+                                <label class="form-label">ชื่อผู้ใช้งาน (Username) *ห้ามซ้ำ*</label>
+                                <input type="text" id="newDrvUsername" class="form-input" placeholder="เช่น somchai" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">รหัสผ่าน (Password)</label>
+                                <input type="password" id="newDrvPassword" class="form-input" placeholder="ขั้นต่ำ 4 ตัวอักษร" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">ชื่อ-นามสกุล คนขับ</label>
+                                <input type="text" id="newDrvName" class="form-input" placeholder="เช่น นายสมชาย ยอดขนส่ง" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">เบอร์โทรศัพท์ติดต่อ</label>
+                                <input type="text" id="newDrvPhone" class="form-input" placeholder="เช่น 081-234-5678" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">เลขทะเบียนรถ</label>
+                                <input type="text" id="newDrvPlate" class="form-input" placeholder="เช่น 1กข-9988" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">จังหวัดทะเบียนรถ</label>
+                                <input type="text" id="newDrvPlateProvince" class="form-input" placeholder="เช่น กรุงเทพฯ" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">คลังสินค้าที่สังกัด</label>
+                                <select id="newDrvWarehouse" class="form-select" required>
+                                    <option value="สุขสวัสดิ์">คลังสุขสวัสดิ์ (Suksawat)</option>
+                                    <option value="พัทยา">คลังพัทยา (Pattaya)</option>
+                                    <option value="โคราช">คลังโคราช (Korat)</option>
+                                    <option value="ปราจีนบุรี">คลังปราจีนบุรี (Prachinburi)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">ประเภทพาหนะ</label>
+                                <select id="newDrvVehicleType" class="form-select" required>
+                                    <option value="pickup">รถกระบะ (Pickup)</option>
+                                    <option value="truck">รถบรรทุก 6 ล้อ (6-Wheeler)</option>
+                                    <option value="truck_12">รถบรรทุก 12 ล้อ (12-Wheeler)</option>
+                                    
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">ประเภทพนักงาน</label>
+                                <select id="newDrvType" class="form-select" required>
+                                    <option value="regular">คนขับประจำ (พนักงาน)</option>
+                                    <option value="3pl">ขนส่งนอก (3PL)</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="margin-top: 1rem; width: 100%; background: var(--color-success); border:none;">
+                                ➕ สร้างบัญชีและอนุมัติทันที
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- TAB 5: USER MANAGEMENT PANEL -->
+            <div id="tab-user-manage" class="tab-content" style="display: none;">
+                <div class="hq-panel">
+                    <div class="hq-panel-header" style="margin-bottom: 1.5rem;">
+                        <h3 class="hq-panel-title">ระบบจัดการรหัสผ่านผู้ใช้งาน (แอดมิน และคนขับทั้งหมดในระบบ)</h3>
+                    </div>
+                    <div class="hq-table-container">
+                        <table class="hq-table">
+                            <thead>
+                                <tr>
+                                    <th>ประเภทบัญชี</th>
+                                    <th>Username</th>
+                                    <th>ชื่อ-นามสกุล</th>
+                                    <th>คลัง / สังกัด</th>
+                                    <th>รหัสผ่านปัจจุบัน</th>
+                                    <th style="width: 380px;">เปลี่ยนรหัสผ่านใหม่</th>
+                                </tr>
+                            </thead>
+                            <tbody id="userManageTableBody">
+                                <!-- Injected by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Core App Logic Database Sync -->
+    <script src="app.js"></script>
+    <script>
+        // ---------------------------------------------------------
+        // Page Tab Switcher & Session Check
+        // ---------------------------------------------------------
+        function switchSuperTab(tabId) {
+            // Close mobile menu if open
+            const sidebar = document.querySelector('.hq-sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            if (sidebar && sidebar.classList.contains('active')) {
+                sidebar.classList.remove('active');
+            }
+            if (overlay && overlay.classList.contains('active')) {
+                overlay.classList.remove('active');
+            }
+
+            document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.hq-menu-item').forEach(el => el.classList.remove('active'));
+            
+            const titleEl = document.getElementById('superDashboardTitle');
+            const subtitleEl = document.getElementById('superDashboardSubtitle');
+
+            if (tabId === 'hq-list') {
+                document.getElementById('tab-hq-list').style.display = 'block';
+                document.getElementById('menu-hq-list').classList.add('active');
+                titleEl.textContent = 'ทำเนียบรายชื่อบัญชีเจ้าหน้าที่คลังสินค้า';
+                subtitleEl.textContent = 'รายชื่อเจ้าหน้าที่ที่เปิดสิทธิ์ดูแลคลังควบคุมระบบ';
+                renderAccountsTable();
+            } else if (tabId === 'drv-list') {
+                document.getElementById('tab-drv-list').style.display = 'block';
+                document.getElementById('menu-drv-list').classList.add('active');
+                titleEl.textContent = 'ทำเนียบพนักงานขับรถขนส่ง';
+                subtitleEl.textContent = 'ตรวจสอบรายชื่อและสิทธิ์พนักงานขับรถประจำคลัง / ขนส่งนอก';
+                renderSuperDriversTable();
+            } else if (tabId === 'hq-create') {
+                document.getElementById('tab-hq-create').style.display = 'block';
+                document.getElementById('menu-hq-create').classList.add('active');
+                titleEl.textContent = 'สร้างบัญชี Admin HQ ใหม่';
+                subtitleEl.textContent = 'ลงทะเบียนเจ้าหน้าที่ดูแลคลังสินค้าประจำภูมิภาค';
+            } else if (tabId === 'drv-create') {
+                document.getElementById('tab-drv-create').style.display = 'block';
+                document.getElementById('menu-drv-create').classList.add('active');
+                titleEl.textContent = 'สร้างบัญชีคนจัดส่งใหม่';
+                subtitleEl.textContent = 'สร้างและอนุมัติบัญชีพนักงานจัดส่ง / ขนส่งนอก ทันที';
+            } else if (tabId === 'user-manage') {
+                document.getElementById('tab-user-manage').style.display = 'block';
+                document.getElementById('menu-user-manage').classList.add('active');
+                titleEl.textContent = 'จัดการรหัสผ่านและข้อมูลผู้ใช้งาน';
+                subtitleEl.textContent = 'ดูรหัสผ่านผู้ใช้งานในระบบทั้งหมด และสามารถเปลี่ยนรหัสผ่านเพื่อแก้ไขสิทธิ์ได้ทันที';
+                renderUserManageTable();
+            }
+        }
+
+        function checkSession() {
+            const isSuperLoggedIn = localStorage.getItem('super_logged_in') === 'true';
+            const loginSec = document.getElementById('superLoginSection');
+            const dashSec = document.getElementById('superDashboardSection');
+            
+            if (isSuperLoggedIn) {
+                loginSec.style.setProperty('display', 'none', 'important');
+                dashSec.style.display = '';
+                switchSuperTab('hq-list');
+            } else {
+                loginSec.style.display = '';
+                dashSec.style.setProperty('display', 'none', 'important');
+            }
+        }
+
+        // ---------------------------------------------------------
+        // User Credentials Management Console
+        // ---------------------------------------------------------
+        function renderUserManageTable() {
+            const accounts = DB.get("hq_accounts", []);
+            const drivers = DB.get("drivers", []);
+            const tbody = document.getElementById('userManageTableBody');
+            tbody.innerHTML = '';
+
+            const allUsers = [];
+
+            // Add hq_accounts
+            accounts.forEach(acc => {
+                allUsers.push({
+                    id: acc.id,
+                    type: 'hq',
+                    typeName: 'เจ้าหน้าที่ HQ',
+                    username: acc.username,
+                    name: acc.name,
+                    warehouse: acc.warehouse === 'all' ? 'ทุกคลัง (Admin Logistics)' : `คลัง${acc.warehouse}`,
+                    password: acc.password || '-'
+                });
+            });
+
+            // Add drivers
+            drivers.forEach(drv => {
+                const roleText = drv.driverType === 'regular' ? 'คนขับประจำ' : 'ขนส่งนอก (3PL)';
+                allUsers.push({
+                    id: drv.id,
+                    type: 'driver',
+                    typeName: `คนขับ (${roleText})`,
+                    username: drv.username || `(ลงทะเบียนเบอร์โทร) ${drv.phone}`,
+                    name: drv.name,
+                    warehouse: `คลัง${drv.warehouse || 'สุขสวัสดิ์'} (${drv.plate})`,
+                    password: drv.password || '(ใช้ OTP / ไม่มีรหัสผ่าน)'
+                });
+            });
+
+            if (allUsers.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:2rem; color:var(--hq-text-muted);">ไม่มีผู้ใช้งานใดๆ ในระบบ</td></tr>`;
+                return;
+            }
+
+            allUsers.forEach(u => {
+                const typeColor = u.type === 'hq' ? 'var(--color-primary)' : 'var(--color-secondary)';
+                const passDisplay = u.password;
+                
+                const canChange = (u.type === 'hq') || (u.type === 'driver' && u.username && !u.username.startsWith('(ลงทะเบียน'));
+                const inputHtml = canChange ? `
+                    <div style="display:flex; gap:8px;">
+                        <input type="text" id="newpass-${u.type}-${u.id}" class="form-input" style="padding:4px 8px; font-size:0.85rem; height:32px; background:rgba(255,255,255,0.03); color:white;" placeholder="รหัสผ่านใหม่">
+                        <button class="btn btn-primary btn-sm" onclick="changeUserPassword('${u.type}', '${u.id}')" style="padding:4px 12px; font-size:0.75rem; height:32px; background:var(--color-primary); border:none;">บันทึก</button>
+                    </div>
+                ` : `<span style="color:var(--hq-text-muted); font-size:0.8rem;">ล็อกอินด้วย OTP เท่านั้น (ไม่มีรหัสผ่าน)</span>`;
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td><span style="background:rgba(255,255,255,0.05); color:${typeColor}; padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:bold;">${u.typeName}</span></td>
+                        <td style="font-family:var(--font-heading); color:var(--color-info);">${u.username}</td>
+                        <td><strong>${u.name}</strong></td>
+                        <td>${u.warehouse}</td>
+                        <td style="font-family:var(--font-heading); color:var(--color-warning); font-weight:bold;">${passDisplay}</td>
+                        <td>${inputHtml}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        function changeUserPassword(type, id) {
+            const inputEl = document.getElementById(`newpass-${type}-${id}`);
+            const newPassword = inputEl.value.trim();
+
+            if (!newPassword) {
+                alert("กรุณากรอกรหัสผ่านใหม่!");
+                return;
+            }
+            if (newPassword.length < 4) {
+                alert("รหัสผ่านใหม่ต้องมีอย่างน้อย 4 ตัวอักษร!");
+                return;
+            }
+
+            if (type === 'hq') {
+                const accounts = DB.get("hq_accounts", []);
+                const acc = accounts.find(a => a.id === id);
+                if (acc) {
+                    acc.password = newPassword;
+                    DB.set("hq_accounts", accounts);
+                    alert(`เปลี่ยนรหัสผ่านของแอดมิน ${acc.name} สำเร็จ!`);
+                    inputEl.value = '';
+                    renderUserManageTable();
+                }
+            } else if (type === 'driver') {
+                const drivers = DB.get("drivers", []);
+                const drv = drivers.find(d => d.id === id);
+                if (drv) {
+                    drv.password = newPassword;
+                    DB.set("drivers", drivers);
+                    alert(`เปลี่ยนรหัสผ่านของคนขับ ${drv.name} สำเร็จ!`);
+                    inputEl.value = '';
+                    renderUserManageTable();
+                }
+            }
+        }
+
+        // ---------------------------------------------------------
+        // Login & Logout Handlers
+        // ---------------------------------------------------------
+        function handleSuperLogin(event) {
+            event.preventDefault();
+            const u = document.getElementById('superUsername').value.trim();
+            const p = document.getElementById('superPassword').value;
+            const err = document.getElementById('loginError');
+
+            if (u === 'mmk-mt' && p === 'Ricemill123') {
+                localStorage.setItem('super_logged_in', 'true');
+                err.style.display = 'none';
+                document.getElementById('superUsername').value = '';
+                document.getElementById('superPassword').value = '';
+                checkSession();
+            } else {
+                err.textContent = '❌ ชื่อผู้ใช้งานหรือรหัสผ่านระบบควบคุมไม่ถูกต้อง!';
+                err.style.display = 'block';
+            }
+        }
+
+        function handleSuperLogout(event) {
+            if (event) event.preventDefault();
+            if (confirm('คุณต้องการออกจากระบบสิทธิ์ผู้ควบคุมหลักใช่หรือไม่?')) {
+                localStorage.removeItem('super_logged_in');
+                checkSession();
+            }
+        }
+
+        // ---------------------------------------------------------
+        // Accounts CRUD Render & Controls
+        // ---------------------------------------------------------
+        function renderAccountsTable() {
+            const accounts = DB.get("hq_accounts", []);
+            const tbody = document.getElementById('accountsTableBody');
+            tbody.innerHTML = '';
+
+            if (accounts.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:2rem; color:var(--hq-text-muted);">ไม่มีบัญชีแอดมินลงทะเบียนในระบบ</td></tr>`;
+                return;
+            }
+
+            // Sort by Created date newest first
+            const sortedAccs = [...accounts].sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+            sortedAccs.forEach(acc => {
+                let badgeClass = 'badge-pending';
+                let statusText = 'รอการอนุมัติ';
+                if (acc.status === 'approved') {
+                    badgeClass = 'badge-approved';
+                    statusText = 'อนุมัติแล้ว';
+                } else if (acc.status === 'rejected') {
+                    badgeClass = 'badge-rejected';
+                    statusText = 'ระงับสิทธิ์';
+                }
+
+                const dateStr = acc.createdAt ? new Date(acc.createdAt).toLocaleDateString('th-TH') : '-';
+
+                let actionHtml = '';
+                if (acc.status === 'pending') {
+                    actionHtml = `
+                        <button class="btn btn-primary btn-sm" onclick="changeAccountStatus('${acc.id}', 'approved')" style="background:var(--color-success); border:none; padding:4px 8px; font-size:0.75rem;">อนุมัติ</button>
+                        <button class="btn btn-outline btn-sm" onclick="changeAccountStatus('${acc.id}', 'rejected')" style="color:var(--color-danger); border-color:rgba(239,68,68,0.2); padding:4px 8px; font-size:0.75rem;">ระงับ</button>
+                    `;
+                } else if (acc.status === 'approved') {
+                    actionHtml = `
+                        <button class="btn btn-outline btn-sm" onclick="changeAccountStatus('${acc.id}', 'rejected')" style="color:var(--color-danger); border-color:rgba(239,68,68,0.2); padding:4px 8px; font-size:0.75rem;">ระงับสิทธิ์</button>
+                    `;
+                } else {
+                    actionHtml = `
+                        <button class="btn btn-primary btn-sm" onclick="changeAccountStatus('${acc.id}', 'approved')" style="background:var(--color-success); border:none; padding:4px 8px; font-size:0.75rem;">อนุมัติใช้งาน</button>
+                    `;
+                }
+
+                const whText = acc.warehouse === 'all' ? 'ทุกคลัง (Admin Logistics)' : `คลัง${acc.warehouse}`;
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${acc.name}</strong></td>
+                        <td style="font-family:var(--font-heading); color:var(--color-primary);">${acc.username}</td>
+                        <td><span style="font-weight:600; color:var(--color-secondary);">${whText}</span></td>
+                        <td style="color:var(--hq-text-muted); font-size:0.85rem;">${dateStr}</td>
+                        <td><span class="super-status-badge ${badgeClass}">${statusText}</span></td>
+                        <td>
+                            <div class="action-group">
+                                ${actionHtml}
+                                <button class="btn btn-outline btn-sm" onclick="deleteAccount('${acc.id}')" style="color:var(--color-danger); border-color:rgba(239,68,68,0.1); padding:4px 8px; font-size:0.75rem; background:rgba(239,68,68,0.02);" title="ลบบัญชีออกจากระบบ">ลบ</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function changeAccountStatus(id, newStatus) {
+            const accounts = DB.get("hq_accounts", []);
+            const target = accounts.find(acc => acc.id === id);
+            if (target) {
+                target.status = newStatus;
+                DB.set("hq_accounts", accounts);
+                renderAccountsTable();
+                alert(`เปลี่ยนสถานะบัญชีเรียบร้อยแล้ว!`);
+            }
+        }
+
+        function deleteAccount(id) {
+            if (confirm("⚠️ ยืนยันการลบบัญชีนี้ออกจากระบบใช่หรือไม่? ข้อมูลของบัญชีนี้จะหายไปอย่างถาวร")) {
+                const accounts = DB.get("hq_accounts", []);
+                const filtered = accounts.filter(acc => acc.id !== id);
+                DB.set("hq_accounts", filtered);
+                renderAccountsTable();
+                alert(`ลบบัญชีออกจากระบบสำเร็จ!`);
+            }
+        }
+
+        function handleCreateAccount(event) {
+            event.preventDefault();
+
+            const usernameVal = document.getElementById('newAccUsername').value.trim();
+            const passwordVal = document.getElementById('newAccPassword').value;
+            const nameVal = document.getElementById('newAccName').value.trim();
+            const warehouseVal = document.getElementById('newAccWarehouse').value;
+
+            if (passwordVal.length < 4) {
+                alert("รหัสผ่านต้องมีอย่างน้อย 4 ตัวอักษร!");
+                return;
+            }
+
+            const accounts = DB.get("hq_accounts", []);
+            const exists = accounts.some(acc => acc.username.toLowerCase() === usernameVal.toLowerCase());
+
+            if (exists) {
+                alert("ขออภัย! ชื่อผู้ใช้งานนี้มีอยู่ในระบบแล้ว");
+                return;
+            }
+
+            const newAcc = {
+                id: `hq-${Date.now()}`,
+                username: usernameVal,
+                password: passwordVal,
+                name: nameVal,
+                warehouse: warehouseVal,
+                status: 'approved', // Created by Super Admin: auto-approved
+                createdAt: new Date().toISOString()
+            };
+
+            accounts.push(newAcc);
+            DB.set("hq_accounts", accounts);
+
+            document.getElementById('createAccountForm').reset();
+            switchSuperTab('hq-list');
+            alert(`สร้างบัญชีของ ${nameVal} (คลัง${warehouseVal}) และอนุมัติสิทธิ์เข้าใช้งานสำเร็จ!`);
+        }
+
+        function handleCreateDriver(event) {
+            event.preventDefault();
+
+            const usernameVal = document.getElementById('newDrvUsername').value.trim();
+            const passwordVal = document.getElementById('newDrvPassword').value;
+            const nameVal = document.getElementById('newDrvName').value.trim();
+            const phoneVal = document.getElementById('newDrvPhone').value.trim();
+            const plateVal = document.getElementById('newDrvPlate').value.trim();
+            const plateProvinceVal = document.getElementById('newDrvPlateProvince').value.trim();
+            const warehouseVal = document.getElementById('newDrvWarehouse').value;
+            const vehicleTypeVal = document.getElementById('newDrvVehicleType').value;
+            const driverTypeVal = document.getElementById('newDrvType').value;
+
+            if (passwordVal.length < 4) {
+                alert("รหัสผ่านต้องมีอย่างน้อย 4 ตัวอักษร!");
+                return;
+            }
+
+            const drivers = DB.get("drivers", []);
+            const exists = drivers.some(d => d.username && d.username.toLowerCase() === usernameVal.toLowerCase());
+
+            if (exists) {
+                alert("ขออภัย! ชื่อผู้ใช้งานคนขับนี้มีอยู่ในระบบแล้ว");
+                return;
+            }
+
+            const newDrvId = `drv-${Date.now()}`;
+            const newDrv = {
+                id: newDrvId,
+                username: usernameVal,
+                password: passwordVal,
+                name: nameVal,
+                phone: phoneVal,
+                plate: plateVal,
+                plateProvince: plateProvinceVal,
+                warehouse: warehouseVal,
+                vehicleType: vehicleTypeVal,
+                driverType: driverTypeVal,
+                status: 'approved', // auto approved
+                createdAt: new Date().toISOString()
+            };
+
+            drivers.push(newDrv);
+            DB.set("drivers", drivers);
+
+            // Set default GPS simulator location
+            const locations = DB.get("driverLocations", {});
+            locations[newDrvId] = { driverId: newDrvId, lat: DEPOT.lat, lng: DEPOT.lng, lastActive: new Date().toISOString(), currentStopIndex: 1 };
+            DB.set("driverLocations", locations);
+
+            document.getElementById('createDriverForm').reset();
+            switchSuperTab('drv-list');
+            alert(`สร้างบัญชีคนจัดส่งของ ${nameVal} ทะเบียน ${plateVal} สังกัดคลัง${warehouseVal} และอนุมัติสิทธิ์สำเร็จ!`);
+        }
+
+        // ---------------------------------------------------------
+        // Drivers CRUD Render & Controls
+        // ---------------------------------------------------------
+        function renderSuperDriversTable() {
+            const drivers = DB.get("drivers", []);
+            const tbody = document.getElementById('superDriverTableBody');
+            tbody.innerHTML = '';
+
+            if (drivers.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="10" style="text-align:center; padding:2rem; color:var(--hq-text-muted);">ไม่มีรายชื่อพนักงานขับรถในระบบ</td></tr>`;
+                return;
+            }
+
+            // Sort pending drivers first
+            const sortedDrivers = [...drivers].sort((a, b) => {
+                if (a.status === 'pending' && b.status !== 'pending') return -1;
+                if (a.status !== 'pending' && b.status === 'pending') return 1;
+                return new Date(b.id.split('-')[1] || 0) - new Date(a.id.split('-')[1] || 0);
+            });
+
+            const vehicleMapping = {
+                pickup: "กระบะ 4 ล้อ (Pickup)",
+                truck: "บรรทุก 6 ล้อใหญ่ (Truck)",
+                truck_12: "รถบรรทุก 12 ล้อ (12-Wheeler)",
+                
+            };
+
+            sortedDrivers.forEach(drv => {
+                let badgeClass = 'badge-pending';
+                let statusText = 'รออนุมัติ';
+                if (drv.status === 'approved') {
+                    badgeClass = 'badge-approved';
+                    statusText = 'อนุมัติแล้ว';
+                } else if (drv.status === 'rejected') {
+                    badgeClass = 'badge-rejected';
+                    statusText = 'ระงับสิทธิ์';
+                }
+
+                let actionHtml = '';
+                if (drv.status === 'pending') {
+                    actionHtml = `
+                        <button class="btn btn-primary btn-sm" onclick="changeDriverStatus('${drv.id}', 'approved')" style="background:var(--color-success); border:none; padding:4px 8px; font-size:0.75rem;">อนุมัติ</button>
+                        <button class="btn btn-outline btn-sm" onclick="changeDriverStatus('${drv.id}', 'rejected')" style="color:var(--color-danger); border-color:rgba(239,68,68,0.2); padding:4px 8px; font-size:0.75rem;">ระงับ</button>
+                    `;
+                } else if (drv.status === 'approved') {
+                    actionHtml = `
+                        <button class="btn btn-outline btn-sm" onclick="changeDriverStatus('${drv.id}', 'rejected')" style="color:var(--color-danger); border-color:rgba(239,68,68,0.2); padding:4px 8px; font-size:0.75rem;">ระงับสิทธิ์</button>
+                    `;
+                } else {
+                    actionHtml = `
+                        <button class="btn btn-primary btn-sm" onclick="changeDriverStatus('${drv.id}', 'approved')" style="background:var(--color-success); border:none; padding:4px 8px; font-size:0.75rem;">อนุมัติใช้งาน</button>
+                    `;
+                }
+
+                const typeBadge = drv.driverType === 'regular' ? 
+                    `<span style="background:rgba(37, 99, 235, 0.1); color:var(--color-primary); padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:bold;">คนขับประจำ</span>` : 
+                    `<span style="background:rgba(139, 92, 246, 0.1); color:var(--color-secondary); padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:bold;">ขนส่งนอก</span>`;
+
+                let weightCapacityHtml = '';
+                if (drv.driverType === '3pl') {
+                    const fixedW = drv.maxWeight || getDriverDefaultMaxWeight('3pl', drv.vehicleType);
+                    weightCapacityHtml = `<span style="color:var(--hq-text-muted); font-weight:600;">${fixedW.toLocaleString()} กก. (คงที่)</span>`;
+                } else {
+                    const currentW = drv.maxWeight || getDriverDefaultMaxWeight('regular', drv.vehicleType);
+                    weightCapacityHtml = `
+                        <input type="number" class="table-input" value="${currentW}" 
+                               style="width: 100px; padding: 4px 8px; border-radius: 8px; border: 1px solid var(--hq-border); background: rgba(255,255,255,0.03); color: white; text-align: center; font-weight: bold;" 
+                               onchange="updateDriverMaxWeightFromSuper('${drv.id}', this.value)">
+                    `;
+                }
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td style="font-family:var(--font-heading); color:var(--hq-text-muted); font-size:0.8rem;">${drv.id}</td>
+                        <td>${typeBadge}</td>
+                        <td><strong>${drv.name}</strong></td>
+                        <td>${drv.phone}</td>
+                        <td><strong style="color:white;">${drv.plate}</strong></td>
+                        <td>${drv.plateProvince || 'ไม่ระบุ'}</td>
+                        <td><span style="font-weight:600; color:var(--color-secondary);">คลัง${drv.warehouse || 'สุขสวัสดิ์'}</span></td>
+                        <td>${vehicleMapping[drv.vehicleType] || drv.vehicleType}</td>
+                        <td>${weightCapacityHtml}</td>
+                        <td><span class="super-status-badge ${badgeClass}">${statusText}</span></td>
+                        <td>
+                            <div class="action-group">
+                                ${actionHtml}
+                                <button class="btn btn-outline btn-sm" onclick="deleteDriver('${drv.id}')" style="color:var(--color-danger); border-color:rgba(239,68,68,0.1); padding:4px 8px; font-size:0.75rem; background:rgba(239,68,68,0.02);" title="ลบข้อมูลคนขับ">ลบ</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function changeDriverStatus(id, newStatus) {
+            const drivers = DB.get("drivers", []);
+            const target = drivers.find(d => d.id === id);
+            if (target) {
+                target.status = newStatus;
+                DB.set("drivers", drivers);
+                
+                if (newStatus === 'approved') {
+                    const locations = DB.get("driverLocations", {});
+                    if (!locations[id]) {
+                        locations[id] = { driverId: id, lat: DEPOT.lat, lng: DEPOT.lng, lastActive: new Date().toISOString(), currentStopIndex: 1 };
+                        DB.set("driverLocations", locations);
+                    }
+                }
+                
+                renderSuperDriversTable();
+                alert(`เปลี่ยนสถานะสิทธิ์พนักงานขับรถเรียบร้อยแล้ว!`);
+            }
+        }
+
+        function deleteDriver(id) {
+            if (confirm("⚠️ ยืนยันการลบข้อมูลพนักงานขับรถคนนี้ออกจากระบบใช่หรือไม่? ข้อมูลประวัติคนขับจะหายไปอย่างถาวร")) {
+                const drivers = DB.get("drivers", []);
+                const filtered = drivers.filter(d => d.id !== id);
+                DB.set("drivers", filtered);
+                renderSuperDriversTable();
+                alert(`ลบข้อมูลคนขับสำเร็จ!`);
+            }
+        }
+
+        function updateAllTables() {
+            if (document.getElementById('tab-hq-list').style.display === 'block') {
+                renderAccountsTable();
+            }
+            if (document.getElementById('tab-drv-list').style.display === 'block') {
+                renderSuperDriversTable();
+            }
+            if (document.getElementById('tab-user-manage').style.display === 'block') {
+                renderUserManageTable();
+            }
+        }
+
+        // Listen for database changes from other tabs/modals
+        window.addEventListener('storage', updateAllTables);
+        window.addEventListener('storage-update', updateAllTables);
+
+        // Run checking on load
+        checkSession();
+    </script>
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleMobileMenu()"></div>
+</body>
+</html>

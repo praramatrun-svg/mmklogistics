@@ -1,0 +1,12 @@
+504:                                     <button class="btn btn-outline btn-sm" style="font-size: 0.75rem; border-color: var(--color-secondary); color: var
+1193:         let selectedAssignDriverId = '';
+1938:             selectedAssignDriverId = '';
+2203:             selectedAssignDriverId = ''; // reset driver selection
+2271:             selectedAssignDriverId = drvId;
+2378:             if (!selectedAssignDriverId) {
+2383:             const drv = DB.get("drivers").find(d => d.id === selectedAssignDriverId);
+2450:             if (tempUploadedOrders.length === 0 || !selectedAssignDriverId) return;
+2453:             const driverId = selectedAssignDriverId;
+4109:         function openQueueTransferQuick() {
+4110:             if (!selectedAssignDriverId) {
+4114:             showDriverRouteReport(selectedAssignDriverId);

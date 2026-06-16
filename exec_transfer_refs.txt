@@ -1,0 +1,18 @@
+562:                             <button onclick="downloadSampleDriverCSV()" class="btn btn-outline" style="padding: 0.45rem 0.9rem; font-size: 0.8rem; fon
+570:                             <input type="file" id="driverExcelFileInput" style="display: none;" accept=".xlsx, .xls, .csv" onchange="handleDriverExcel
+579:                          ondrop="handleDriverExcelDrop(event)">
+1110:                 <button id="btnConfirmRouteTransfer" class="btn btn-primary btn-sm" style="padding: 0.5rem; font-size: 0.8rem; font-weight: 700; backg
+3944:         function downloadSampleDriverCSV() {
+3961:         function handleDriverExcelDrop(e) {
+3967:                 processDriverFile(files[0]);
+3971:         function handleDriverExcelUpload(input) {
+3974:             processDriverFile(file);
+3978:         function processDriverFile(file) {
+3985:                     parseDriverCSVText(text);
+3996:                         updateDriversFromExcel(json);
+4005:         function parseDriverCSVText(text) {
+4036:             updateDriversFromExcel(rows);
+4039:         function updateDriversFromExcel(json) {
+4122:         function executeRouteTransfer(sourceDriverId, targetDriverId, filterType) {
+4195:         function executeRouteTransferFromModal() {
+4213:             executeRouteTransfer(activeReportDriverId, targetDriverId, filterType);

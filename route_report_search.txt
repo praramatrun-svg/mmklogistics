@@ -1,0 +1,19 @@
+1049:     <div class="modal" id="driverRouteReportModal" onclick="closeDriverRouteReportModal(event)">
+1054:                     <h2 id="reportDriverName" style="color: white; font-family: var(--font-heading); margin-top: 3px;">รายงานเส้นทางคนขับ</h2>
+1056:                 <button onclick="hideDriverRouteReportModal()" style="background:none; border:none; color: var(--hq-text-muted); font-size:1.5rem; cursor:pointe
+1105:                         <select id="transferTargetDriverSelect" class="form-select" style="width: 100%; padding: 0.45rem; font-size: 0.8rem; background: #0f172a
+1333:                         <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--hq-border); padding: 1rem; border-radius: 16px; display:flex; fl
+1606:                         showDriverRouteReport(drv.id);
+3348:         function showDriverRouteReport(driverId) {
+3349:             activeReportDriverId = driverId; // Set current report driver ID
+3357:             const transferSelect = document.getElementById('transferTargetDriverSelect');
+3378:             document.getElementById('reportDriverName').innerHTML = `
+3472:         function hideDriverRouteReportModal() {
+3539:         function closeDriverRouteReportModal(e) {
+3541:                 hideDriverRouteReportModal();
+3942:         let activeReportDriverId = null;
+4114:             showDriverRouteReport(selectedAssignDriverId);
+4196:             const targetSelect = document.getElementById('transferTargetDriverSelect');
+4208:             if (!activeReportDriverId) {
+4213:             executeRouteTransfer(activeReportDriverId, targetDriverId, filterType);
+4214:             hideDriverRouteReportModal();
